@@ -1,0 +1,764 @@
+import { Component, inject, computed, ElementRef, ViewChild, EffectRef, effect, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { EditorState } from '../../state/editor.state';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
+@Component({
+  selector: 'app-code-editor',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <div class="editor-container" *ngIf="activeFile; else noFile">
+      <div class="split-view">
+        <!-- Code View -->
+        <!-- Code View -->
+        @if (codeVisible() || !showPreview()) {
+          <div class="code-column">
+            <div class="line-numbers">
+              @for (line of lines(); track $index) {
+                <div class="line-number">{{ $index + 1 }}</div>
+              }
+            </div>
+            <div class="code-area">
+              <pre><code [innerHTML]="highlightedContent()"></code></pre>
+            </div>
+          </div>
+        }
+
+        <!-- Preview/Cards View (Only for specific files) -->
+        @if (showPreview()) {
+          <div class="preview-column">
+            <div class="preview-header">
+              <span>PREVIEW</span>
+              <button class="icon-btn" (click)="toggleCode()" title="Toggle Code View">
+                <i class="pi" [class.pi-eye]="!codeVisible()" [class.pi-eye-slash]="codeVisible()"></i>
+              </button>
+            </div>
+            
+            <div class="preview-content">
+              @if (activeFile()!.id === 'inicio') {
+                <div class="profile-view">
+                  <!-- Hero Card: Avatar + Code -->
+                  <div class="hero-card">
+                    <div class="avatar-section">
+                       <!-- User Avatar Image -->
+                       <div class="avatar-circle">
+                         <img src="assets/avatar.jpg" alt="Andres Serrano" class="avatar-img">
+                       </div>
+                    </div>
+                    <div class="code-snippet-section">
+                      <pre class="mini-code">
+<span style="color: #569cd6">const</span> <span style="color: #4ec9b0">desarrollador</span> = {{ '{' }}
+  <span style="color: #9cdcfe">nombre</span>: <span style="color: #ce9178">'Andres Serrano'</span>,
+  <span style="color: #9cdcfe">titulo</span>: <span style="color: #ce9178">'Desarrollador de Software'</span>,
+  <span style="color: #9cdcfe">ubicacion</span>: <span style="color: #ce9178">'Ecuador'</span>,
+  <span style="color: #9cdcfe">disponible</span>: <span style="color: #569cd6">true</span>
+{{ '}' }}</pre>
+                    </div>
+                  </div>
+
+                  <!-- Info Card: Bio + Buttons -->
+                  <div class="info-card">
+                    <h2 class="role-title">Desarrollador de Software</h2>
+                    <p class="bio-text">
+                      Soy un Desarrollador de Software apasionado por la tecnología y la creación de soluciones eficientes. Me encanta enfrentar nuevos desafíos, aprender constantemente y aportar ideas innovadoras.
+                    </p>
+                    
+                    <div class="social-actions" style="margin-bottom: 25px;">
+                      <a href="https://github.com/andresSP23" target="_blank" class="social-btn github">
+                        <i class="pi pi-github"></i> GitHub
+                      </a>
+                      <a href="https://www.linkedin.com/in/andrés-serrano-00b758345" target="_blank" class="social-btn linkedin">
+                        <i class="pi pi-linkedin"></i> LinkedIn
+                      </a>
+                        <a href="#" target="_blank" class="social-btn linkedin">
+                        <i class="pi pi-file-pdf"></i>Decargar CV
+                      </a>
+                    </div>
+
+                    <!-- Tech Stack -->
+                     <h3 class="role-title" style="font-size: 18px; margin-top: 10px;">Stack Tecnológico</h3>
+                     <div class="project-tags huge-tags">
+                        @if (parsedData()?.stack) {
+                            @for (tech of parsedData().stack; track tech) {
+                                <span>{{ tech }}</span>
+                            }
+                        } @else {
+                             <!-- Fallback if parsing fails or before sync -->
+                             <span>Angular</span><span>Java</span><span>TypeScript</span><span>Spring Boot</span>
+                        }
+                     </div>
+                  </div>
+                </div>
+              }
+
+              @if (activeFile()!.id === 'proyectos' && parsedData()) {
+                <div class="projects-grid">
+                  <div class="project-card">
+                    <h3>Sistema para administrar un gimnasio</h3>
+                    <p>Un sistema diseñado para satisfacer todas las necesidades de un gimnasio de barrio , desde la creacion de clientes, suscripciones , productos y servicios , hasta la gestion de pagos y asistencias , 
+                    caja y reportes , ademas registrar todos los movimientos de dinero que haga la caja  y de igual manera los bancos registrados en el sistema.
+                  
+                  </p>
+                  <br>
+                   <p>Diseña tus plantillas de contratos imprimelas y vuelvelas a subir para que tengas una gestion de contratos personalizada.
+                    Gestiona tus facturas y recibos de pago de manera eficiente.
+                    Gestiona el pago de tus servicios basicos como agua , luz , internet , etc.
+                    Gestiona el equipamiento que compras y el mantenimiento que requiere.
+                  
+                  
+                  </p>
+                    <div class="project-tags">
+                      <span>Angular</span><span>Spring Boot</span><span>PostgreSQL</span>
+                    </div>
+                    <div class="status finished">Completado</div>
+                  </div>
+                  
+                  <div class="project-card">
+                    <h3>VS Code Portfolio</h3>
+                    <p>Este portafolio simulando un IDE.</p>
+                    <div class="project-tags">
+                      <span>Angular</span><span>Signals</span>
+                    </div>
+                  </div>
+                </div>
+
+              }
+
+              @if (activeFile()!.id === 'sobre-mi' && parsedData()) {
+                <div class="profile-view">
+                  <!-- Education Card -->
+                  <div class="info-card">
+                    <h2 class="role-title" style="margin-bottom: 20px;">
+                     Formación Académica
+                    </h2>
+                    <div class="education-list">
+                      @for (edu of parsedData().formacion; track edu.titulo) {
+                        <div class="edu-item" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 6px;">
+                           <div class="contact-list" style="gap: 8px;">
+                              <div class="contact-item">
+                                <span class="label" style="width: 100px;">Título:</span>
+                                <span class="value" style="color: #4ec9b0; font-weight: bold;">{{ edu.titulo }}</span>
+                              </div>
+                              <div class="contact-item">
+                                <span class="label" style="width: 100px;">Institución:</span>
+                                <span class="value">{{ edu.institucion }}</span>
+                              </div>
+                              <div class="contact-item">
+                                <span class="label" style="width: 100px;">Año:</span>
+                                <span class="value">{{ edu.anio }}</span>
+                              </div>
+                           </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- Experience Card -->
+                  <div class="info-card">
+                    <h2 class="role-title" style="margin-bottom: 20px;">
+                      Experiencia Laboral
+                    </h2>
+                    <div class="education-list">
+                      @for (exp of parsedData().experiencia; track exp.puesto) {
+                        <div class="edu-item" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 6px;">
+                           <div class="contact-list" style="gap: 8px;">
+                              <div class="contact-item">
+                                <span class="label" style="width: 100px;">Puesto:</span>
+                                <span class="value" style="color: #4ec9b0; font-weight: bold;">{{ exp.puesto }}</span>
+                              </div>
+                              <div class="contact-item">
+                                <span class="label" style="width: 100px;">Empresa:</span>
+                                <span class="value">{{ exp.empresa }}</span>
+                              </div>
+                              <div class="contact-item">
+                                <span class="label" style="width: 100px;">Periodo:</span>
+                                <span class="value">{{ exp.periodo }}</span>
+                              </div>
+                              <div class="contact-item" style="align-items: flex-start;">
+                                <span class="label" style="width: 100px;">Descripción:</span>
+                                <p class="value" style="margin: 0; line-height: 1.4; flex: 1;">{{ exp.descripcion }}</p>
+                              </div>
+                           </div>
+                        </div>
+                      }
+                    </div>
+                  </div>
+
+                  <!-- Interests Card -->
+                  <div class="info-card">
+                    <h2 class="role-title" style="margin-bottom: 20px;">
+                    Intereses
+                    </h2>
+                    <div class="education-list">
+                      @for (int of parsedData().intereses; track int) {
+                        <div class="edu-item" style="padding: 10px 15px; background: rgba(255,255,255,0.03); border-radius: 6px; display: flex; align-items: center;">
+                           <i class="pi pi-circle-fill" style="font-size: 6px; margin-right: 15px; color: #4ec9b0;"></i>
+                           <span class="value" style="color: #4ec9b0; font-weight: bold; font-size: 15px;">{{ int }}</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+
+              @if (activeFile()!.id === 'habilidades' && parsedData()) {
+                <div class="profile-view">
+                  <div class="info-card">
+                    <h2 class="role-title" style="margin-bottom: 20px;">
+                      <i class="pi pi-bolt card-icon"></i>Habilidades Técnicas
+                    </h2>
+                    
+                    <div class="skills-section">
+                      <h3 style="color: #cccccc; margin-bottom: 10px;">Frontend</h3>
+                      <div class="project-tags">
+                        @for (skill of parsedData().frontend; track skill) {
+                          <span style="border-color: #569cd6">{{ skill }}</span>
+                        }
+                      </div>
+                    </div>
+
+                    <div class="skills-section" style="margin-top: 20px;">
+                      <h3 style="color: #cccccc; margin-bottom: 10px;">Backend</h3>
+                      <div class="project-tags">
+                        @for (skill of parsedData().backend; track skill) {
+                          <span style="border-color: #ce9178">{{ skill }}</span>
+                        }
+                      </div>
+                    </div>
+
+                    <div class="skills-section" style="margin-top: 20px;">
+                      <h3 style="color: #cccccc; margin-bottom: 10px;">Herramientas</h3>
+                      <div class="project-tags">
+                        @for (tool of parsedData().herramientas; track tool) {
+                          <span style="border-color: #4ec9b0">{{ tool }}</span>
+                        }
+                      </div>
+                    </div>
+
+                       <div class="skills-section" style="margin-top: 20px;">
+                      <h3 style="color: #cccccc; margin-bottom: 10px;">Bases de datos</h3>
+                      <div class="project-tags">
+                        @for (tool of parsedData().bases_de_datos; track tool) {
+                          <span style="border-color: #4ec9b0">{{ tool }}</span>
+                        }
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+
+              @if (activeFile()!.id === 'contacto' && parsedData()) {
+                <div class="profile-view">
+                  <div class="info-card">
+                    <h2 class="role-title" style="margin-bottom: 20px;">
+                      <i class="pi pi-envelope card-icon"></i>Contacto
+                    </h2>
+                    
+                    <div class="contact-list">
+                      <div class="contact-item">
+                         <span class="label">Email:</span>
+                         <span class="value">{{ parsedData().email }}</span>
+                      </div>
+                      <div class="contact-item">
+                         <span class="label">Telefono:</span>
+                         <span class="value">{{ parsedData().telefono }}</span>
+                      </div>
+                    
+                    </div>
+
+                    <div class="contact-footer" style="margin-top: 30px; font-style: italic; color: var(--vscode-accent);">
+                      {{ parsedData().footer }}
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    <ng-template #noFile>
+      <div class="empty-state">
+        <i class="pi pi-code" style="font-size: 5rem; color: #333;"></i>
+        <p>Select a file to view content</p>
+      </div>
+    </ng-template>
+  `,
+  styles: [`
+    .editor-container {
+      height: 100%;
+      background-color: var(--vscode-editor-bg);
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.5;
+      overflow: hidden;
+    }
+
+    .split-view {
+      display: flex;
+      height: 100%;
+      width: 100%;
+    }
+
+    .code-column {
+      flex: 1;
+      display: flex;
+      overflow: auto;
+      border-right: 1px solid var(--vscode-border);
+      min-width: 50%;
+    }
+
+    .preview-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background-color: var(--vscode-bg);
+      overflow: hidden;
+    }
+
+    .preview-header {
+      padding: 8px 15px;
+      background-color: var(--vscode-activity-bar-bg);
+      font-size: 11px;
+      font-weight: bold;
+      border-bottom: 1px solid var(--vscode-border);
+      color: #bbb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .icon-btn {
+      background: none;
+      border: none;
+      color: #bbb;
+      cursor: pointer;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+    .icon-btn:hover {
+      background-color: rgba(255,255,255,0.1);
+      color: white;
+    }
+
+    .preview-content {
+      padding: 20px;
+      overflow: auto;
+      flex: 1;
+    }
+
+    /* New Profile Layout Styles */
+    .profile-view {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .hero-card {
+      display: flex;
+      align-items: center;
+      background-color: var(--vscode-editor-bg); /* Use editor BG for cleaner look, or sidebar BG */
+      border: 1px solid var(--vscode-border);
+      border-radius: 4px; /* VS Code uses 4px or 0px mostly */
+      padding: 30px;
+      gap: 30px;
+    }
+
+    .avatar-circle {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #007acc 0%, #005a9e 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      border: 2px solid var(--vscode-border);
+      overflow: hidden; /* Ensure image stays circular */
+    }
+
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .code-snippet-section {
+      flex: 1;
+    }
+
+    .mini-code {
+      background: transparent;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .info-card {
+      background-color: var(--vscode-sidebar-bg);
+      border: 1px solid var(--vscode-border);
+      border-radius: 4px;
+      padding: 30px;
+    }
+
+    .role-title {
+      color: var(--vscode-text);
+      font-family: var(--font-sans);
+      font-size: 24px;
+      margin-bottom: 8px; /* Tighter spacing */
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+
+    .card-icon {
+      color: #C5C5C5; /* Standard VS Code icon color */
+      font-size: 20px;
+      margin-right: 10px;
+    }
+
+    .bio-text {
+      color: #cccccc;
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      margin-bottom: 25px;
+      max-width: 800px;
+      font-size: 15px;
+    }
+
+    .social-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px; /* Standard button sizing */
+      border-radius: 2px; /* Native VS Code button radius */
+      border: 1px solid transparent;
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 400;
+      cursor: pointer;
+      color: white;
+      justify-content: center;
+      min-width: 100px;
+      text-decoration: none; /* Ensure links look like buttons */
+    }
+    
+    .social-btn:hover {
+      opacity: 1;
+      cursor: pointer;
+    }
+    
+    .social-btn:focus {
+      outline: 1px solid var(--vscode-selection);
+      outline-offset: 2px;
+    }
+    
+    /* Native VS Code Button Colors */
+    .social-btn.github { 
+      background-color: var(--vscode-accent); /* #007acc */
+    }
+    .social-btn.github:hover {
+      background-color: #0062a3; /* Darker blue interact state */
+    }
+    
+    .social-btn.linkedin { 
+      background-color: #2d2d2d; /* Secondary button style */
+      border: 1px solid var(--vscode-border);
+    }
+    .social-btn.linkedin:hover {
+      background-color: #383838;
+    }
+
+    /* Tags/Project Cards (Keeping existing) */
+    .project-card {
+      background-color: #252526;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #3e3e42;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      margin-bottom: 20px;
+    }
+
+    .projects-grid {
+      display: flex;
+      flex-direction: column; 
+      gap: 20px;
+      width: 100%;
+    }
+
+    .status {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+    .status.finished { background-color: rgba(76, 175, 80, 0.2); color: #4caf50; }
+    .status.in-progress { background-color: rgba(33, 150, 243, 0.2); color: #2196f3; }
+    
+    .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .project-tags span {
+      background-color: #2d2d2d;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: var(--vscode-text);
+    }
+
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-size: 15px;
+    }
+
+    .contact-item .label {
+      font-weight: 600;
+      color: #569cd6;
+      width: 80px;
+    }
+
+    .contact-item .value {
+      color: #ce9178;
+    }
+
+    .line-numbers {
+      padding: 10px 15px 10px 5px;
+      text-align: right;
+      color: #858585;
+      background-color: var(--vscode-editor-bg);
+      border-right: 1px solid #333;
+      user-select: none;
+      min-width: 50px;
+    }
+
+    .code-area {
+      padding: 10px 0 10px 20px;
+      color: var(--vscode-text);
+      flex: 1;
+    }
+
+    .empty-state {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #666;
+    }
+
+    pre {
+      margin: 0;
+      font-family: inherit;
+    }
+  `]
+})
+export class CodeEditorComponent {
+  editorState = inject(EditorState);
+  sanitizer = inject(DomSanitizer);
+
+  activeFile = this.editorState.activeFile;
+
+  codeVisible = signal(true);
+
+  constructor() {
+    effect(() => {
+      const file = this.activeFile();
+      if (file && (file.id === 'inicio' || file.id === 'proyectos' || file.id === 'sobre-mi' || file.id === 'habilidades' || file.id === 'contacto')) {
+        this.codeVisible.set(false);
+      } else {
+        this.codeVisible.set(true);
+      }
+    }, { allowSignalWrites: true });
+  }
+
+  content = computed(() => this.activeFile()?.content || '');
+
+  lines = computed(() => {
+    return this.content().split('\n');
+  });
+
+  showPreview = computed(() => {
+    const file = this.activeFile();
+    return file && (file.id === 'inicio' || file.id === 'proyectos' || file.id === 'sobre-mi' || file.id === 'habilidades' || file.id === 'contacto');
+  });
+
+  toggleCode() {
+    this.codeVisible.update(v => !v);
+  }
+
+  highlightedContent = computed(() => {
+    const file = this.activeFile();
+    if (!file || !file.content) return '';
+    return this.highlight(file.content, file.language);
+  });
+
+  // Dynamic Data Parsing for Previews (Re-added for Template Compatibility)
+  parsedData = computed(() => {
+    const file = this.activeFile();
+    if (!file || !file.content) return null;
+
+    try {
+      if (file.id === 'inicio') {
+        return this.parseInicioTs(file.content);
+      }
+      if (file.id === 'sobre-mi') {
+        const cleanJson = file.content.replace(/,\s*([\]}])/g, '$1');
+        return JSON.parse(cleanJson);
+      }
+      if (file.id === 'proyectos') {
+        return this.parseProyectosTs(file.content);
+      }
+      if (file.id === 'habilidades') {
+        return this.parseHabilidadesYml(file.content);
+      }
+      if (file.id === 'contacto') {
+        return this.parseContactoMd(file.content);
+      }
+    } catch (e) {
+      console.warn('Error parsing preview data', e);
+      return null;
+    }
+    return null;
+  });
+
+  private parseInicioTs(content: string) {
+    const extract = (key: string) => {
+      const match = content.match(new RegExp(`${key}:\\s*'([^']*)'`));
+      return match ? match[1] : '';
+    };
+
+    return {
+      nombre: extract('nombre'),
+      titulo: extract('titulo'),
+      ubicacion: extract('ubicacion'),
+      bio: extract('bio'),
+      stack: content.match(/stack:\s*\[([\s\S]*?)\]/)?.[1]
+        .split(',')
+        .map(s => s.trim().replace(/'/g, ''))
+        .filter(s => s) || []
+    };
+  }
+
+  private parseProyectosTs(content: string) {
+    const projects = [];
+    // Updated regex to handle template literals (backticks) if used in description
+    const projectRegex = /{\s*nombre:\s*'([^']*)',\s*descripcion:\s*[`'"]([\s\S]*?)[`'"],\s*tags:\s*\[([^\]]*)\],\s*estado:\s*'([^']*)'\s*}/g;
+
+    let match;
+    while ((match = projectRegex.exec(content)) !== null) {
+      projects.push({
+        nombre: match[1],
+        descripcion: match[2],
+        tags: match[3].split(',').map(t => t.trim().replace(/'/g, '')).filter(t => t),
+        estado: match[4]
+      });
+    }
+    return projects;
+  }
+
+  private parseHabilidadesYml(content: string) {
+    const lines = content.split('\n');
+    const skills: any = {};
+    let currentCategory = '';
+
+    lines.forEach(line => {
+      const categoryMatch = line.match(/^(\w+):/);
+      if (categoryMatch) {
+        currentCategory = categoryMatch[1];
+        skills[currentCategory] = [];
+      } else if (currentCategory && line.trim().startsWith('-')) {
+        skills[currentCategory].push(line.trim().substring(2).trim());
+      }
+    });
+    return skills;
+  }
+
+  private parseContactoMd(content: string) {
+    const extract = (key: string) => {
+      const regex = new RegExp(`- \\*\\*${key}:\\*\\*\\s*(.*)`);
+      const match = content.match(regex);
+      return match ? match[1].trim() : '';
+    };
+
+    return {
+      email: extract('Email'),
+      telefono: extract('Telefono'),
+
+      footer: content.match(/¡Hablemos de código!/)?.[0] || ''
+    };
+  }
+
+
+  // Robust Syntax Highlighting
+  private highlight(code: string, lang?: string): SafeHtml {
+    if (!code) return '';
+
+    const escape = (text: string) => text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    if (lang === 'typescript' || lang === 'json' || lang === 'javascript') {
+      let html = '';
+      const tokenRegex = /((?:\/\/.*)|(?:\/\*[\s\S]*?\*\/))|((?:'[^']*')|(?:"[^"]*")|(?:`[\s\S]*?`))|(\b\d+\b)|(\b(?:export|const|let|var|function|class|interface|return|true|false|null|import|from|public|private|protected|type|implements|extends|this|new|void|any|string|number|boolean)\b)/g;
+
+      let lastIndex = 0;
+      let match;
+
+      while ((match = tokenRegex.exec(code)) !== null) {
+        html += escape(code.slice(lastIndex, match.index));
+
+        const [fullMatch, comment, string, number, keyword] = match;
+
+        if (comment) {
+          html += `<span style="color: #6a9955">${escape(comment)}</span>`;
+        } else if (string) {
+          html += `<span style="color: #ce9178">${escape(string)}</span>`;
+        } else if (number) {
+          html += `<span style="color: #b5cea8">${escape(number)}</span>`;
+        } else if (keyword) {
+          html += `<span style="color: #569cd6">${escape(keyword)}</span>`;
+        }
+
+        lastIndex = tokenRegex.lastIndex;
+      }
+      html += escape(code.slice(lastIndex));
+      return this.sanitizer.bypassSecurityTrustHtml(html);
+    }
+
+    if (lang === 'markdown') {
+      let html = escape(code);
+      html = html
+        .replace(/^#\s(.*)$/gm, '<span style="color: #569cd6; font-weight: bold;"># $1</span>')
+        .replace(/(\*\*(.*?)\*\*)/g, '<span style="color: #ce9178; font-weight: bold;">$1</span>')
+        .replace(/(`[^`]+`)/g, '<span style="color: #ce9178;">$1</span>');
+      return this.sanitizer.bypassSecurityTrustHtml(html);
+    }
+
+    if (lang === 'yaml') {
+      const lines = code.split('\n');
+      const processedLines = lines.map(line => {
+        const parts = /^(\s*)([\w-]+)(:)(.*)$/.exec(line);
+        if (parts) {
+          const [_, indent, key, colon, val] = parts;
+          return `${indent}<span style="color: #9cdcfe">${escape(key)}</span>${colon}<span style="color: #ce9178">${escape(val)}</span>`;
+        }
+        return escape(line);
+      });
+      return this.sanitizer.bypassSecurityTrustHtml(processedLines.join('\n'));
+    }
+
+    return this.sanitizer.bypassSecurityTrustHtml(escape(code));
+  }
+
+}

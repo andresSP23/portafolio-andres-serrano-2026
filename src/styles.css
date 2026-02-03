@@ -1,0 +1,105 @@
+/* PrimeIcons Integration */
+@import "primeicons/primeicons.css";
+
+/* VS Code Dark Theme Variables */
+:root {
+  --vscode-bg: #1e1e1e;
+  --vscode-sidebar-bg: #252526;
+  --vscode-activity-bar-bg: #333333;
+  --vscode-status-bar-bg: #007acc;
+  --vscode-editor-bg: #1e1e1e;
+  --vscode-text: #d4d4d4;
+  --vscode-accent: #007acc;
+  --vscode-border: #3e3e42;
+  --vscode-hover: #2a2d2e;
+  --vscode-selection: #264f78;
+  --vscode-tab-inactive: #2d2d2d;
+  --vscode-tab-active: #1e1e1e;
+
+  --font-mono: 'Consolas', 'Courier New', monospace;
+  --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Reset & Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+app-root {
+  height: 100%;
+  height: -webkit-fill-available;
+  height: 100dvh;
+  width: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--vscode-bg);
+  color: var(--vscode-text);
+  position: fixed;
+  /* Crucial for some mobile browsers to prevent shifting */
+  left: 0;
+  top: 0;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #424242;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Text Colors (Tailwind-like) */
+.text-blue-500 {
+  color: #3b82f6;
+}
+
+.text-blue-400 {
+  color: #60a5fa;
+}
+
+.text-blue-300 {
+  color: #93c5fd;
+}
+
+.text-blue-200 {
+  color: #bfdbfe;
+}
+
+.text-orange-500 {
+  color: #f97316;
+}
+
+.text-yellow-400 {
+  color: #facc15;
+}
+
+.text-purple-400 {
+  color: #c084fc;
+}
+
+.text-red-400 {
+  color: #f87171;
+}
+
+.text-red-300 {
+  color: #fca5a5;
+}
