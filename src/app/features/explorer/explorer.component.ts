@@ -66,10 +66,6 @@ import { FileNode } from '../../core/models/file-system.model';
       font-weight: bold;
     }
 
-    .folder-header:hover {
-      background-color: var(--vscode-hover);
-    }
-
     .file-item {
       padding: 3px 20px;
       cursor: pointer;
@@ -79,8 +75,14 @@ import { FileNode } from '../../core/models/file-system.model';
       color: #cccccc;
     }
 
-    .file-item:hover {
-      background-color: var(--vscode-hover);
+    @media (hover: hover) {
+      .folder-header:hover {
+        background-color: var(--vscode-hover);
+      }
+  
+      .file-item:hover {
+        background-color: var(--vscode-hover);
+      }
     }
 
     .file-item.active {

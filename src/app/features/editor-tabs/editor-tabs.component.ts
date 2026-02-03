@@ -4,10 +4,10 @@ import { EditorState } from '../../state/editor.state';
 import { FileNode } from '../../core/models/file-system.model';
 
 @Component({
-    selector: 'app-editor-tabs',
-    standalone: true,
-    imports: [CommonModule],
-    template: `
+  selector: 'app-editor-tabs',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
     <div class="tabs-container">
       @for (file of editorState.openFiles(); track file.id) {
         <div 
@@ -23,7 +23,7 @@ import { FileNode } from '../../core/models/file-system.model';
       }
     </div>
   `,
-    styles: [`
+  styles: [`
     .tabs-container {
       display: flex;
       background-color: var(--vscode-bg);
@@ -46,9 +46,19 @@ import { FileNode } from '../../core/models/file-system.model';
       user-select: none;
     }
     
-    .tab:hover {
-      background-color: var(--vscode-bg);
-      color: var(--vscode-text);
+    @media (hover: hover) {
+      .tab:hover {
+        background-color: var(--vscode-bg);
+        color: var(--vscode-text);
+      }
+      
+      .tab:hover .close-icon {
+        opacity: 1;
+      }
+
+      .close-icon:hover {
+        background-color: #4b4b4b;
+      }
     }
     
     .tab.active {
@@ -78,36 +88,32 @@ import { FileNode } from '../../core/models/file-system.model';
       padding: 2px;
     }
 
-    .tab:hover .close-icon, .tab.active .close-icon {
+    .tab.active .close-icon {
       opacity: 1;
-    }
-
-    .close-icon:hover {
-      background-color: #4b4b4b;
     }
   `]
 })
 export class EditorTabsComponent {
-    editorState = inject(EditorState);
+  editorState = inject(EditorState);
 
-    activate(id: string) {
-        this.editorState.setActive(id);
-    }
+  activate(id: string) {
+    this.editorState.setActive(id);
+  }
 
-    close(id: string, event: Event) {
-        this.editorState.closeFile(id, event);
-    }
+  close(id: string, event: Event) {
+    this.editorState.closeFile(id, event);
+  }
 
-    getFileIcon(file: FileNode): string {
-        switch (file.language) {
-            case 'typescript': return 'pi-code text-blue-500';
-            case 'html': return 'pi-code text-orange-500';
-            case 'css': return 'pi-palette text-blue-300';
-            case 'json': return 'pi-sliders-h text-yellow-400';
-            case 'markdown': return 'pi-info-circle text-blue-200';
-            case 'image': return 'pi-image text-purple-400';
-            case 'yaml': return 'pi-file text-red-400';
-            default: return 'pi-file';
-        }
+  getFileIcon(file: FileNode): string {
+    switch (file.language) {
+      case 'typescript': return 'pi-code text-blue-500';
+      case 'html': return 'pi-code text-orange-500';
+      case 'css': return 'pi-palette text-blue-300';
+      case 'json': return 'pi-sliders-h text-yellow-400';
+      case 'markdown': return 'pi-info-circle text-blue-200';
+      case 'image': return 'pi-image text-purple-400';
+      case 'yaml': return 'pi-file text-red-400';
+      default: return 'pi-file';
     }
+  }
 }

@@ -50,8 +50,10 @@ import { EditorState } from '../../state/editor.state';
       transition: color 0.2s ease;
     }
     
-    .icon:hover {
-      color: var(--vscode-text);
+    @media (hover: hover) {
+      .icon:hover {
+        color: var(--vscode-text);
+      }
     }
     
     .icon.active {
