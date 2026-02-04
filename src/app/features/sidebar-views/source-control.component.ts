@@ -2,10 +2,10 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-source-control',
-    standalone: true,
-    imports: [CommonModule],
-    template: `
+  selector: 'app-source-control',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
     <aside class="sidebar-view">
       <div class="sidebar-header">
         <span>CONTROL DE CÓDIGO FUENTE</span>
@@ -53,7 +53,7 @@ import { CommonModule } from '@angular/common';
       </div>
     </aside>
   `,
-    styles: [`
+  styles: [`
     .sidebar-view {
       background-color: var(--vscode-sidebar-bg);
       height: 100%;
@@ -181,10 +181,10 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class SourceControlComponent {
-    showSuccess = signal(false);
+  showSuccess = signal(false);
 
-    onCommit() {
-        this.showSuccess.set(true);
-        // Podríamos añadir un timeout para que se quite solo, pero dejar el botón de volver es más VS Code
-    }
+  onCommit() {
+    this.showSuccess.set(true);
+    // Podríamos añadir un timeout para que se quite solo, pero dejar el botón de volver es más VS Code
+  }
 }

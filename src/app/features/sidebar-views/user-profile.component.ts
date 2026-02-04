@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-    selector: 'app-user-profile',
-    standalone: true,
-    imports: [CommonModule],
-    template: `
+  selector: 'app-user-profile',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
     <aside class="sidebar-view">
       <div class="sidebar-header">
         <span>PERFIL DE USUARIO</span>
@@ -43,7 +43,7 @@ import { CommonModule } from '@angular/common';
       </div>
     </aside>
   `,
-    styles: [`
+  styles: [`
     .sidebar-view {
       background-color: var(--vscode-sidebar-bg);
       height: 100%;

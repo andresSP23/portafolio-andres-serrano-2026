@@ -4,10 +4,10 @@ import { EditorState } from '../../state/editor.state';
 import { FileNode } from '../../core/models/file-system.model';
 
 @Component({
-    selector: 'app-search',
-    standalone: true,
-    imports: [CommonModule],
-    template: `
+  selector: 'app-search',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
     <aside class="search-view">
       <div class="search-header">
         <span>BUSCAR</span>
@@ -49,7 +49,7 @@ import { FileNode } from '../../core/models/file-system.model';
       </div>
     </aside>
   `,
-    styles: [`
+  styles: [`
     .search-view {
       background-color: var(--vscode-sidebar-bg);
       height: 100%;
@@ -134,30 +134,30 @@ import { FileNode } from '../../core/models/file-system.model';
   `]
 })
 export class SearchComponent {
-    editorState = inject(EditorState);
+  editorState = inject(EditorState);
 
-    onSearchInput(event: Event) {
-        const query = (event.target as HTMLInputElement).value;
-        this.editorState.setSearchQuery(query);
-    }
+  onSearchInput(event: Event) {
+    const query = (event.target as HTMLInputElement).value;
+    this.editorState.setSearchQuery(query);
+  }
 
-    onFileClick(file: FileNode) {
-        this.editorState.openFile(file);
-        if (typeof window !== 'undefined' && window.innerWidth < 768) {
-            this.editorState.setSidebarVisibility(false);
-        }
+  onFileClick(file: FileNode) {
+    this.editorState.openFile(file);
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      this.editorState.setSidebarVisibility(false);
     }
+  }
 
-    getFileIcon(file: FileNode): string {
-        switch (file.language) {
-            case 'typescript': return 'pi-code text-blue-500';
-            case 'html': return 'pi-code text-orange-500';
-            case 'css': return 'pi-palette text-blue-300';
-            case 'json': return 'pi-sliders-h text-yellow-400';
-            case 'markdown': return 'pi-info-circle text-blue-200';
-            case 'image': return 'pi-image text-purple-400';
-            case 'yaml': return 'pi-file text-red-400';
-            default: return 'pi-file';
-        }
+  getFileIcon(file: FileNode): string {
+    switch (file.language) {
+      case 'typescript': return 'pi-code text-blue-500';
+      case 'html': return 'pi-code text-orange-500';
+      case 'css': return 'pi-palette text-blue-300';
+      case 'json': return 'pi-sliders-h text-yellow-400';
+      case 'markdown': return 'pi-info-circle text-blue-200';
+      case 'image': return 'pi-image text-purple-400';
+      case 'yaml': return 'pi-file text-red-400';
+      default: return 'pi-file';
     }
+  }
 }
