@@ -15,7 +15,7 @@ export const FILES: FileNode[] = [
 
 Usa la **Barra de Actividad** de la izquierda para navegar.
 - 📂 **Explorador**: Explora los archivos del proyecto.
-- 🔍 **Buscar**: Busca cadenas (solo demostración).
+- 🔍 **Buscar**: Buscar archivos.
 - 🐙 **Código Fuente**: Ver mi GitHub.
 
 ### Inicio Rápido
@@ -78,16 +78,16 @@ Usa la **Barra de Actividad** de la izquierda para navegar.
         type: 'file',
         language: 'typescript',
         content: `/**
- * Sistema de Administración de Gimnasios (ERP)
+ * Sistema de Administración de Gimnasios - Gym FLOW
  * Solución integral para la gestión operativa y financiera de centros deportivos.
  */
 
 export const proyectos = [
   {
-    nombre: 'Sistema para administrar un gimnasio (ERP)',
+    nombre: 'Sistema de administracion de Gimnasios - GYM FLOW',
     descripcion: \`Solución integral para la gestión operativa y financiera de centros deportivos, diseñada con una arquitectura robusta y escalable.
 
-🚀 STACK TECNOLÓGICO:
+STACK TECNOLÓGICO:
 • Lenguaje: Java 21 (LTS)
 • Framework Principal: Spring Boot 3.5
 • Persistencia: Spring Data JPA con Hibernate y PostgreSQL
@@ -96,14 +96,14 @@ export const proyectos = [
 • Generación de Documentos: iTextPDF para contratos y reportes dinámicos
 • Documentación de API: OpenAPI / Swagger (Springdoc)
 
-🛠️ CAPACIDADES DEL SISTEMA:
+CAPACIDADES DEL SISTEMA:
 1. Gestión de Socios y Membresías: Control de suscripciones (Activo, Vencido, Pendiente), contratos dinámicos en PDF, seguimiento físico y control de asistencia.
 2. Control Financiero y Contabilidad: Gestión de sesiones de caja, flujo de caja (ingresos/egresos), conciliación bancaria y categorización de gastos.
 3. Ventas e Inventario: Punto de Venta (POS), control de stock inteligente y categorización comercial.
 4. Infraestructura y Mantenimiento: Gestión de activos físicos y programación de mantenimientos preventivos/correctivos automáticos.
 5. Inteligencia de Negocios: Métricas en tiempo real, análisis de tendencias y top de ventas.
 
-🏛️ ARQUITECTURA Y PATRONES:
+ARQUITECTURA Y PATRONES:
 Diseño Orientado a Dominios (DDD), Clean Code & SOLID, Seguridad Multicapa e Integración Transaccional para garantizar la integridad de los datos.\`,
     tags: ['Java 21', 'Spring Boot 3.5', 'PostgreSQL', 'JWT', 'Flyway'],
     estado: 'Completado',

@@ -99,28 +99,28 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                 <div class="profile-view">
                   <div class="info-card">
                     <h2 class="role-title" style="margin-bottom: 20px;">
-                      <i class="pi pi-folder card-icon"></i>Proyectos
+                     Proyectos
                     </h2>
                     <div class="projects-grid" style="display: flex; flex-direction: column; gap: 20px;">
                       @for (proj of parsedData(); track proj.nombre) {
-                        <div class="project-card" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 5px; border: none;">
-                           <div class="project-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
-                               <h3 class="project-title" style="margin: 0; font-size: 20px; color: #4ec9b0; font-weight: 600;">
+                       <div class="project-card">
+                           <div class="project-header">
+                               <h3 class="project-title">
                                  {{ proj.nombre }}
                                </h3>
-                               <div class="status" [class.finished]="proj.estado === 'Completado'" [class.in-progress]="proj.estado === 'En Progreso'" style="font-size: 11px; padding: 4px 8px; font-weight: bold; border-radius: 4px;">{{ proj.estado }}</div>
+                               <div class="status" [class.finished]="proj.estado === 'Completado'" [class.in-progress]="proj.estado === 'En Progreso'">{{ proj.estado }}</div>
                            </div>
 
-                           <div class="project-body" style="margin-bottom: 20px;">
-                             <p class="value" style="margin: 0; line-height: 1.6; white-space: pre-line; color: #cccccc; font-size: 15px;">{{ proj.descripcion }}</p>
+                           <div class="project-body">
+                             <p class="value project-desc">{{ proj.descripcion }}</p>
                            </div>
                               
-                           <div class="project-stack" style="margin-bottom: 20px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
-                              <span style="font-size: 12px; color: #666; margin-bottom: 8px; display: block; text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold;">Tecnologías</span>
+                           <div class="project-stack">
+                              <span class="section-label">Tecnologías</span>
                               <div class="project-tags huge-tags" style="display: inline-flex; flex-wrap: wrap; gap: 8px;">
                                  @for (tag of proj.tags; track tag) {
-                                  <span [style]="getTechStyle(tag)" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px;">
-                                     <i [class]="getTechIcon(tag)" style="font-size: 14px;"></i>
+                                  <span [style]="getTechStyle(tag)" class="tech-tag">
+                                     <i [class]="getTechIcon(tag)"></i>
                                      {{ tag }}
                                    </span>
                                  }
@@ -129,7 +129,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
                            <!-- Carrusel de Imágenes del Proyecto -->
                            @if (proj.imagenes && proj.imagenes.length > 0) {
-                             <div class="project-gallery" style="margin-bottom: 20px;">
+                             <div class="project-gallery">
                                <div class="carousel-container">
                                  <button class="carousel-control prev" (click)="prevImage(proj.nombre, proj.imagenes.length)">
                                    <i class="pi pi-chevron-left"></i>
@@ -151,14 +151,14 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
                            <!-- Botones de Acción -->
                            @if (proj.demoUrl || proj.repoUrl) {
-                             <div class="project-actions" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; display: flex; gap: 10px; justify-content: flex-start;">
+                             <div class="project-actions">
                                @if (proj.demoUrl) {
-                                 <a [href]="proj.demoUrl" target="_blank" class="social-btn" style="min-width: auto; padding: 6px 16px; font-size: 13px;">
+                                 <a [href]="proj.demoUrl" target="_blank" class="social-btn action-btn">
                                    <i class="pi pi-external-link"></i> Ver Demo
                                  </a>
                                }
                                @if (proj.repoUrl) {
-                                 <a [href]="proj.repoUrl" target="_blank" class="social-btn" style="min-width: auto; padding: 6px 16px; font-size: 13px;">
+                                 <a [href]="proj.repoUrl" target="_blank" class="social-btn action-btn">
                                    <i class="pi pi-github"></i> Repositorio
                                  </a>
                                }
@@ -179,25 +179,25 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                     <h2 class="role-title" style="margin-bottom: 20px;">
                      Formación Académica
                     </h2>
-                    <div class="education-list">
-                      @for (edu of parsedData().formacion; track edu.titulo) {
-                        <div class="edu-item" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 6px;">
-                           <div class="contact-list" style="gap: 5px;">
-                              <div class="contact-item">
-                                <span class="label">titulo:</span>
-                                <span class="value" style="color: #ce9178; font-weight: bold;">{{ edu.titulo }}</span>
-                              </div>
-                              <div class="contact-item">
-                                <span class="label">institucion:</span>
-                                <span class="value" style="color: #ce9178;">{{ edu.institucion }}</span>
-                              </div>
-                              <div class="contact-item">
-                                <span class="label">anio:</span>
-                                <span class="value" style="color: #b5cea8;">{{ edu.anio }}</span>
-                              </div>
-                           </div>
-                        </div>
-                      }
+                      <div class="education-list">
+                        @for (edu of parsedData().formacion; track edu.titulo) {
+                          <div class="edu-item">
+                             <div class="contact-list">
+                                <div class="contact-item">
+                                  <span class="label">titulo:</span>
+                                  <span class="value highlight-title">{{ edu.titulo }}</span>
+                                </div>
+                                <div class="contact-item">
+                                  <span class="label">institucion:</span>
+                                  <span class="value">{{ edu.institucion }}</span>
+                                </div>
+                                <div class="contact-item">
+                                  <span class="label">anio:</span>
+                                  <span class="value date-val">{{ edu.anio }}</span>
+                                </div>
+                             </div>
+                          </div>
+                        }
                     </div>
                   </div>
 
@@ -208,23 +208,23 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                     </h2>
                     <div class="education-list">
                       @for (exp of parsedData().experiencia; track exp.puesto) {
-                        <div class="edu-item" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 6px;">
-                           <div class="contact-list" style="gap: 5px;">
+                        <div class="edu-item">
+                           <div class="contact-list">
                               <div class="contact-item">
                                 <span class="label">puesto:</span>
-                                <span class="value" style="color: #ce9178; font-weight: bold;">{{ exp.puesto }}</span>
+                                <span class="value highlight-title">{{ exp.puesto }}</span>
                               </div>
                               <div class="contact-item">
                                 <span class="label">empresa:</span>
-                                <span class="value" style="color: #ce9178;">{{ exp.empresa }}</span>
+                                <span class="value">{{ exp.empresa }}</span>
                               </div>
                               <div class="contact-item">
                                 <span class="label">periodo:</span>
-                                <span class="value" style="color: #ce9178;">{{ exp.periodo }}</span>
+                                <span class="value">{{ exp.periodo }}</span>
                               </div>
-                              <div class="contact-item" style="align-items: flex-start;">
+                              <div class="contact-item description-item">
                                 <span class="label">descripcion:</span>
-                                <p class="value" style="margin: 0; line-height: 1.5; flex: 1; white-space: pre-line;">{{ exp.descripcion }}</p>
+                                <p class="value description-text">{{ exp.descripcion }}</p>
                               </div>
                            </div>
                         </div>
@@ -254,13 +254,13 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                     </h2>
                     
                     <div class="skills-section">
-                       <div class="edu-item" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 6px;">
+                       <div class="edu-item">
                           <div style="margin-bottom: 10px;">
                               <span class="label" style="font-size: 16px;">frontend:</span>
                           </div>
                           <div class="project-tags huge-tags" style="padding-left: 15px;">
                             @for (skill of parsedData().frontend; track skill) {
-                              <span style="border: 1px solid #569cd6; color: #569cd6; background: rgba(86, 156, 214, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 5px;">
+                              <span [style]="getTechStyle(skill)" style="display: inline-flex; align-items: center; gap: 5px;">
                                 <i [class]="getTechIcon(skill)"></i>
                                 {{ skill }}
                               </span>
@@ -269,14 +269,14 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                        </div>
                     </div>
 
-                    <div class="skills-section" style="margin-top: 15px;">
-                       <div class="edu-item" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 6px;">
+                    <div class="skills-section">
+                       <div class="edu-item">
                           <div style="margin-bottom: 10px;">
                               <span class="label" style="font-size: 16px;">backend:</span>
                           </div>
                           <div class="project-tags huge-tags" style="padding-left: 15px;">
                             @for (skill of parsedData().backend; track skill) {
-                              <span style="border: 1px solid #ce9178; color: #ce9178; background: rgba(206, 145, 120, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 5px;">
+                              <span [style]="getTechStyle(skill)" style="display: inline-flex; align-items: center; gap: 5px;">
                                 <i [class]="getTechIcon(skill)"></i>
                                 {{ skill }}
                               </span>
@@ -285,14 +285,14 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                        </div>
                     </div>
 
-                    <div class="skills-section" style="margin-top: 15px;">
-                       <div class="edu-item" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 6px;">
+                    <div class="skills-section">
+                       <div class="edu-item">
                           <div style="margin-bottom: 10px;">
                               <span class="label" style="font-size: 16px;">herramientas:</span>
                           </div>
                           <div class="project-tags huge-tags" style="padding-left: 15px;">
                             @for (tool of parsedData().herramientas; track tool) {
-                              <span style="border: 1px solid #4ec9b0; color: #4ec9b0; background: rgba(78, 201, 176, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 5px;">
+                              <span [style]="getTechStyle(tool)" style="display: inline-flex; align-items: center; gap: 5px;">
                                 <i [class]="getTechIcon(tool)"></i>
                                 {{ tool }}
                               </span>
@@ -301,14 +301,14 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                        </div>
                     </div>
 
-                    <div class="skills-section" style="margin-top: 15px;">
-                       <div class="edu-item" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 6px;">
+                    <div class="skills-section">
+                       <div class="edu-item">
                           <div style="margin-bottom: 10px;">
                               <span class="label" style="font-size: 16px;">bases_de_datos:</span>
                           </div>
                           <div class="project-tags huge-tags" style="padding-left: 15px;">
                             @for (tool of parsedData().bases_de_datos; track tool) {
-                              <span style="border: 1px solid #4ec9b0; color: #4ec9b0; background: rgba(78, 201, 176, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 5px;">
+                              <span [style]="getTechStyle(tool)" style="display: inline-flex; align-items: center; gap: 5px;">
                                 <i [class]="getTechIcon(tool)"></i>
                                 {{ tool }}
                               </span>
@@ -484,7 +484,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
     }
 
     .role-title {
-      color: #4ec9b0;
+      color: #569cd6;
       font-size: 24px;
       margin-bottom: 8px;
       font-weight: 600;
@@ -535,15 +535,23 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
     .social-btn:hover {
       background-color: #383838;
       color: #ffffff;
+      border-color: #505050;
     }
     
     .project-card {
-      background-color: #252526;
+      background-color: #1e1e1e;
       padding: 24px;
-      border-radius: 8px;
-      border: 1px solid #3e3e42;
+      border-radius: 6px;
+      border: 1px solid #333;
       margin-bottom: 24px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+      border-color: #505050;
     }
 
     .project-title {
@@ -569,46 +577,149 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
       width: 100%;
     }
 
+    .project-header {
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      margin-bottom: 15px; 
+      flex-wrap: wrap; 
+      gap: 10px;
+    }
+
+    .project-body {
+      margin-bottom: 20px;
+    }
+
     .status {
       display: inline-block;
       font-size: 11px;
       padding: 4px 10px;
-      border-radius: 4px;
+      border-radius: 12px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-    .status.finished { background-color: rgba(76, 175, 80, 0.2); color: #4caf50; border: 1px solid rgba(76, 175, 80, 0.3); }
-    .status.in-progress { background-color: rgba(33, 150, 243, 0.2); color: #2196f3; border: 1px solid rgba(33, 150, 243, 0.3); }
+    .status.finished { background-color: rgba(76, 175, 80, 0.15); color: #4caf50; border: 1px solid rgba(76, 175, 80, 0.3); }
+    .status.in-progress { background-color: rgba(33, 150, 243, 0.15); color: #2196f3; border: 1px solid rgba(33, 150, 243, 0.3); }
     
-    .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+    .project-stack {
+      margin-bottom: 20px;
+      border-top: 1px solid rgba(255,255,255,0.05); 
+      padding-top: 15px;
+    }
+
+    .section-label {
+      font-size: 11px; 
+      color: #858585; 
+      margin-bottom: 10px; 
+      display: block; 
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
+      font-weight: 600;
+    }
+
+    .project-gallery {
+      margin-bottom: 20px;
+    }
     
+    .project-actions {
+      margin-top: 15px; 
+      border-top: 1px solid rgba(255,255,255,0.05); 
+      padding-top: 15px; 
+      display: flex; 
+      gap: 12px; 
+      justify-content: flex-start;
+    }
+
+    .action-btn {
+      min-width: auto; 
+      padding: 6px 16px; 
+      font-size: 13px;
+    }
+    
+    .project-tags { 
+      display: flex; 
+      gap: 15px; 
+      flex-wrap: wrap; 
+      margin-top: 10px; 
+    }
+
+    .tech-tag {
+      display: inline-flex; 
+      align-items: center; 
+      gap: 6px; 
+      padding: 4px 10px;
+      border-radius: 3px;
+      font-size: 13px;
+    }
+
+    .edu-item {
+      padding: 20px;
+      background-color: #1e1e1e;
+      border: 1px solid #333;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      transition: border-color 0.2s;
+    }
+
+    .edu-item:hover {
+      border-color: #4ec9b0;
+    }
+
+    .skills-section {
+      margin-top: 15px;
+    }
+
     .contact-list {
       display: flex;
       flex-direction: column;
-      gap: 15px;
+      gap: 8px;
     }
 
     .contact-item {
       display: flex;
-      gap: 10px;
+      gap: 12px;
       align-items: baseline;
-      font-size: 15px;
+      font-size: 14px;
       flex-wrap: wrap;
     }
 
     .contact-item .label {
-      font-weight: 400; 
-      color: #9cdcfe; 
-      width: auto; 
+      font-weight: 500; 
+      color: #569cd6; 
+      min-width: 80px; 
       margin-right: 0;
       flex-shrink: 0;
+      text-align: right;
     }
 
     .contact-item .value {
       color: #ce9178; 
-      word-break: break-all;
+      word-break: break-word;
       flex: 1;
+    }
+
+    .highlight-title {
+      color: #4ec9b0;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .date-val {
+      color: #b5cea8;
+    }
+    
+    .description-item {
+      align-items: flex-start;
+      margin-top: 5px;
+    }
+
+    .description-text {
+      margin: 0; 
+      line-height: 1.6; 
+      flex: 1; 
+      white-space: pre-line;
+      color: #cccccc;
     }
     
     .punctuation {
@@ -1032,27 +1143,27 @@ export class CodeEditorComponent {
   getTechIcon(tech: string): string {
     const t = tech.toLowerCase();
     const icons: { [key: string]: string } = {
-      'angular': 'devicon-angularjs-plain',
-      'typescript': 'devicon-typescript-plain',
-      'javascript': 'devicon-javascript-plain',
-      'html': 'devicon-html5-plain',
-      'css': 'devicon-css3-plain',
-      'scss': 'devicon-sass-original',
-      'react': 'devicon-react-original',
-      'vue': 'devicon-vuejs-plain',
-      'java': 'devicon-java-plain',
-      'spring': 'devicon-spring-plain',
-      'spring boot': 'devicon-spring-plain',
-      'node': 'devicon-nodejs-plain',
-      'express': 'devicon-express-original',
-      'python': 'devicon-python-plain',
-      'php': 'devicon-php-plain',
-      'c#': 'devicon-csharp-plain',
-      'postgresql': 'devicon-postgresql-plain',
-      'mysql': 'devicon-mysql-plain',
-      'mongodb': 'devicon-mongodb-plain',
-      'git': 'devicon-git-plain',
-      'docker': 'devicon-docker-plain',
+      'angular': 'devicon-angularjs-plain colored',
+      'typescript': 'devicon-typescript-plain colored',
+      'javascript': 'devicon-javascript-plain colored',
+      'html': 'devicon-html5-plain colored',
+      'css': 'devicon-css3-plain colored',
+      'scss': 'devicon-sass-original colored',
+      'react': 'devicon-react-original colored',
+      'vue': 'devicon-vuejs-plain colored',
+      'java': 'devicon-java-plain colored',
+      'spring': 'devicon-spring-plain colored',
+      'spring boot': 'devicon-spring-plain colored',
+      'node': 'devicon-nodejs-plain colored',
+      'express': 'devicon-express-original colored',
+      'python': 'devicon-python-plain colored',
+      'php': 'devicon-php-plain colored',
+      'c#': 'devicon-csharp-plain colored',
+      'postgresql': 'devicon-postgresql-plain colored',
+      'mysql': 'devicon-mysql-plain colored',
+      'mongodb': 'devicon-mongodb-plain colored',
+      'git': 'devicon-git-plain colored',
+      'docker': 'devicon-docker-plain colored',
     };
 
     for (const key in icons) {
