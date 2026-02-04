@@ -91,6 +91,20 @@ import { FileNode } from '../../core/models/file-system.model';
     .tab.active .close-icon {
       opacity: 1;
     }
+
+    @media (max-width: 768px) {
+      .tab {
+        min-width: 80px;
+        padding: 0 6px;
+        font-size: 12px;
+      }
+      .file-icon {
+        margin-right: 4px;
+      }
+      .close-icon {
+        opacity: 0.8;
+      }
+    }
   `]
 })
 export class EditorTabsComponent {

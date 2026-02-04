@@ -77,21 +77,70 @@ Usa la **Barra de Actividad** de la izquierda para navegar.
         name: 'proyectos.ts',
         type: 'file',
         language: 'typescript',
-        content: `export const proyectos = [
-  {
-    nombre: 'Sistema para administrar un gimnasio',
-    descripcion: \`Un sistema diseñado para satisfacer todas las necesidades de un gimnasio de barrio, desde la creación de clientes, suscripciones, productos y servicios, hasta la gestión de pagos y asistencias, caja y reportes.
+        content: `/**
+ * Sistema de Administración de Gimnasios (ERP)
+ * Solución integral para la gestión operativa y financiera de centros deportivos.
+ */
 
-          Además, permite registrar todos los movimientos de dinero de la caja y bancos.Incluye gestión personalizada de contratos, facturación eficiente, control de servicios básicos y mantenimiento de equipamiento.\`,
-    tags: ['Angular', 'Spring Boot', 'PostgreSQL'],
+export const proyectos = [
+  {
+    nombre: 'Sistema para administrar un gimnasio (ERP)',
+    descripcion: \`Solución integral para la gestión operativa y financiera de centros deportivos, diseñada con una arquitectura robusta y escalable.
+
+🚀 STACK TECNOLÓGICO:
+• Lenguaje: Java 21 (LTS)
+• Framework Principal: Spring Boot 3.5
+• Persistencia: Spring Data JPA con Hibernate y PostgreSQL
+• Seguridad: Spring Security con autenticación basada en JWT (Stateless)
+• Gestión de Base de Datos: Migraciones automatizadas con Flyway
+• Generación de Documentos: iTextPDF para contratos y reportes dinámicos
+• Documentación de API: OpenAPI / Swagger (Springdoc)
+
+🛠️ CAPACIDADES DEL SISTEMA:
+1. Gestión de Socios y Membresías: Control de suscripciones (Activo, Vencido, Pendiente), contratos dinámicos en PDF, seguimiento físico y control de asistencia.
+2. Control Financiero y Contabilidad: Gestión de sesiones de caja, flujo de caja (ingresos/egresos), conciliación bancaria y categorización de gastos.
+3. Ventas e Inventario: Punto de Venta (POS), control de stock inteligente y categorización comercial.
+4. Infraestructura y Mantenimiento: Gestión de activos físicos y programación de mantenimientos preventivos/correctivos automáticos.
+5. Inteligencia de Negocios: Métricas en tiempo real, análisis de tendencias y top de ventas.
+
+🏛️ ARQUITECTURA Y PATRONES:
+Diseño Orientado a Dominios (DDD), Clean Code & SOLID, Seguridad Multicapa e Integración Transaccional para garantizar la integridad de los datos.\`,
+    tags: ['Java 21', 'Spring Boot 3.5', 'PostgreSQL', 'JWT', 'Flyway'],
     estado: 'Completado',
     demoUrl: '#', 
-    repoUrl: 'https://github.com/andresSP23'
+    repoUrl: 'https://github.com/andresSP23',
+    imagenes: [
+      'gym-flow/Screenshot 2026-02-03 183901.webp',
+      'gym-flow/Screenshot 2026-02-03 184007.webp',
+      'gym-flow/Screenshot 2026-02-03 184036.webp',
+      'gym-flow/Screenshot 2026-02-03 184121.webp',
+      'gym-flow/Screenshot 2026-02-03 184145.webp',
+      'gym-flow/Screenshot 2026-02-03 184219 (1).webp',
+      'gym-flow/Screenshot 2026-02-03 184219.webp',
+      'gym-flow/Screenshot 2026-02-03 184259.webp',
+      'gym-flow/Screenshot 2026-02-03 184340.webp',
+      'gym-flow/Screenshot 2026-02-03 184412.webp',
+      'gym-flow/Screenshot 2026-02-03 184511.webp',
+      'gym-flow/Screenshot 2026-02-03 184546.webp',
+      'gym-flow/Screenshot 2026-02-03 184611.webp',
+      'gym-flow/Screenshot 2026-02-03 184830.webp',
+      'gym-flow/Screenshot 2026-02-03 184910.webp',
+      'gym-flow/Screenshot 2026-02-03 184949.webp',
+      'gym-flow/Screenshot 2026-02-03 185014.webp',
+      'gym-flow/Screenshot 2026-02-03 185042.webp',
+      'gym-flow/Screenshot 2026-02-03 185115.webp',
+      'gym-flow/Screenshot 2026-02-03 185149.webp',
+      'gym-flow/Screenshot 2026-02-03 185211.webp',
+      'gym-flow/Screenshot 2026-02-03 185246.webp',
+      'gym-flow/Screenshot 2026-02-03 185303.webp',
+      'gym-flow/Screenshot 2026-02-03 185320.webp',
+      'gym-flow/Screenshot 2026-02-03 185339.webp'
+    ]
   },
   {
     nombre: 'VS Code Portfolio',
-    descripcion: 'Este portafolio simulando un IDE.',
-    tags: ['Angular', 'Signals'],
+    descripcion: 'Este portafolio simulando un IDE con funcionalidades de navegación, búsqueda y edición simulada.',
+    tags: ['Angular', 'Signals', 'TypeScript'],
     estado: 'En Progreso',
     demoUrl: '#',
     repoUrl: 'https://github.com/andresSP23/portafolio-andres-serrano-2026'

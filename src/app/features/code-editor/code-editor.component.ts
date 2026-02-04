@@ -126,21 +126,57 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                                  <div class="status" [class.finished]="proj.estado === 'Completado'" [class.in-progress]="proj.estado === 'En Progreso'" style="font-size: 1em; padding: 5px 10px;">{{ proj.estado }}</div>
                               </div>
 
-                              <!-- Botones de Acción -->
-                              @if (proj.demoUrl || proj.repoUrl) {
-                                <div class="contact-item" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; display: flex; gap: 10px; justify-content: flex-start;">
-                                  @if (proj.demoUrl) {
-                                    <a [href]="proj.demoUrl" target="_blank" class="social-btn" style="min-width: auto; padding: 4px 12px; font-size: 12px;">
-                                      <i class="pi pi-external-link"></i> Ver Demo
-                                    </a>
-                                  }
-                                  @if (proj.repoUrl) {
-                                    <a [href]="proj.repoUrl" target="_blank" class="social-btn" style="min-width: auto; padding: 4px 12px; font-size: 12px;">
-                                      <i class="pi pi-github"></i> Repositorio
-                                    </a>
-                                  }
-                                </div>
-                              }
+                               <!-- Carrusel de Imágenes del Proyecto -->
+                               @if (proj.imagenes && proj.imagenes.length > 0) {
+                                 <div class="contact-item" style="flex-direction: column; align-items: flex-start;">
+                                   <span class="label" style="width: 100px; margin-bottom: 10px;">Galería:</span>
+                                   
+                                   <div class="carousel-container">
+                                     <button class="carousel-control prev" (click)="prevImage(proj.nombre, proj.imagenes.length)">
+                                       <i class="pi pi-chevron-left"></i>
+                                     </button>
+
+                                     <div class="carousel-slide" (click)="selectedImage.set(proj.imagenes[getCarouselIndex(proj.nombre)])">
+                                       <img [src]="proj.imagenes[getCarouselIndex(proj.nombre)]" alt="Project Screenshot" class="carousel-img">
+                                       <div class="carousel-counter">
+                                         {{ getCarouselIndex(proj.nombre) + 1 }} / {{ proj.imagenes.length }}
+                                       </div>
+                                     </div>
+
+                                     <button class="carousel-control next" (click)="nextImage(proj.nombre, proj.imagenes.length)">
+                                       <i class="pi pi-chevron-right"></i>
+                                     </button>
+                                   </div>
+                                 </div>
+                               }
+
+                               <!-- Modal / Lightbox -->
+                               @if (selectedImage()) {
+                                 <div class="lightbox-overlay" (click)="selectedImage.set(null)">
+                                   <div class="lightbox-content" (click)="$event.stopPropagation()">
+                                     <button class="close-btn" (click)="selectedImage.set(null)">
+                                       <i class="pi pi-times"></i>
+                                     </button>
+                                     <img [src]="selectedImage()" alt="Full Screenshot" class="full-img">
+                                   </div>
+                                 </div>
+                               }
+
+                               <!-- Botones de Acción -->
+                               @if (proj.demoUrl || proj.repoUrl) {
+                                 <div class="contact-item" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; display: flex; gap: 10px; justify-content: flex-start;">
+                                   @if (proj.demoUrl) {
+                                     <a [href]="proj.demoUrl" target="_blank" class="social-btn" style="min-width: auto; padding: 4px 12px; font-size: 12px;">
+                                       <i class="pi pi-external-link"></i> Ver Demo
+                                     </a>
+                                   }
+                                   @if (proj.repoUrl) {
+                                     <a [href]="proj.repoUrl" target="_blank" class="social-btn" style="min-width: auto; padding: 4px 12px; font-size: 12px;">
+                                       <i class="pi pi-github"></i> Repositorio
+                                     </a>
+                                   }
+                                 </div>
+                               }
                            </div>
                         </div>
                       }
@@ -667,10 +703,267 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
         font-size: 14px;
       }
     }
+
+    .lightbox-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      backdrop-filter: blur(5px);
+      animation: fadeIn 0.2s ease;
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 90%;
+      max-height: 90%;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--vscode-bg);
+      border: 1px solid var(--vscode-border);
+    }
+
+    .full-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 85vh;
+      object-fit: contain;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px; right: 15px;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 1001;
+      transition: background 0.2s;
+    }
+
+    .close-btn:hover {
+      background: rgba(255,0,0,0.6);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+
+    /* Carousel Styles */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .carousel-slide {
+      flex: 1;
+      height: 450px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--vscode-border);
+      position: relative;
+      cursor: pointer;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .carousel-img {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: crisp-edges;
+    }
+
+    .carousel-control {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--vscode-border);
+      color: white;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      z-index: 5;
+    }
+
+    .carousel-control:hover {
+      background: var(--vscode-accent);
+      border-color: var(--vscode-accent);
+    }
+
+    .carousel-counter {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      background: rgba(0,0,0,0.6);
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 13px;
+      color: white;
+      font-weight: bold;
+      pointer-events: none;
+    }
+
+    /* Lightbox Styles */
+    .lightbox-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.9);
+      z-index: 2000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      backdrop-filter: blur(8px);
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 100%;
+      max-height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .full-img {
+      max-width: 95vw;
+      max-height: 95vh;
+      object-fit: contain;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      border-radius: 4px;
+    }
+
+    .close-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      z-index: 2001;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+
+    @media (max-width: 1024px) {
+      .carousel-slide {
+        height: 350px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .carousel-container {
+        gap: 5px;
+      }
+      .carousel-slide {
+        height: 300px;
+      }
+      .carousel-control {
+        position: absolute;
+        bottom: 15px;
+        background: rgba(0,0,0,0.6);
+        width: 36px;
+        height: 36px;
+      }
+      .carousel-control.prev { left: 10px; }
+      .carousel-control.next { left: 56px; } /* Al lado del prev para no tapar el centro */
+      
+      .carousel-counter {
+        bottom: 10px;
+        right: 10px;
+        font-size: 11px;
+      }
+
+      .full-img {
+        max-width: 100vw;
+        max-height: 80vh;
+      }
+      
+      .close-btn {
+        top: 10px;
+        right: 10px;
+        width: 34px;
+        height: 34px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .carousel-slide {
+        height: 220px;
+      }
+      .project-card {
+        padding: 12px;
+      }
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.02);
+      border-color: #007acc !important;
+    }
   `]
 })
 export class CodeEditorComponent {
+  window = window;
   editorState = inject(EditorState);
+  selectedImage = signal<string | null>(null);
+
+  // Carousel State
+  carouselIndices = signal<Record<string, number>>({});
+
+  getCarouselIndex(projectId: string): number {
+    return this.carouselIndices()[projectId] || 0;
+  }
+
+  nextImage(projectId: string, total: number) {
+    this.carouselIndices.update(indices => ({
+      ...indices,
+      [projectId]: (this.getCarouselIndex(projectId) + 1) % total
+    }));
+  }
+
+  prevImage(projectId: string, total: number) {
+    this.carouselIndices.update(indices => ({
+      ...indices,
+      [projectId]: (this.getCarouselIndex(projectId) - 1 + total) % total
+    }));
+  }
+
   sanitizer = inject(DomSanitizer);
 
   activeFile = this.editorState.activeFile;
@@ -774,8 +1067,8 @@ export class CodeEditorComponent {
 
   private parseProyectosTs(content: string) {
     const projects = [];
-    // Regex mejorado para capturar demoUrl y repoUrl opcionales
-    const projectRegex = /{\s*nombre:\s*'([^']*)',\s*descripcion:\s*[`'"]([\s\S]*?)[`'"],\s*tags:\s*\[([^\]]*)\],\s*estado:\s*'([^']*)'(?:\s*,\s*demoUrl:\s*'([^']*)')?(?:\s*,\s*repoUrl:\s*'([^']*)')?\s*}/g;
+    // Regex mejorado para capturar demoUrl, repoUrl e imagenes opcionales
+    const projectRegex = /{\s*nombre:\s*'([^']*)',\s*descripcion:\s*[`'"]([\s\S]*?)[`'"],\s*tags:\s*\[([^\]]*)\],\s*estado:\s*'([^']*)'(?:\s*,\s*demoUrl:\s*'([^']*)')?(?:\s*,\s*repoUrl:\s*'([^']*)')?(?:\s*,\s*imagenes:\s*\[([^\]]*)\])?\s*}/g;
 
     let match;
     while ((match = projectRegex.exec(content)) !== null) {
@@ -785,7 +1078,8 @@ export class CodeEditorComponent {
         tags: match[3].split(',').map(t => t.trim().replace(/'/g, '')).filter(t => t),
         estado: match[4],
         demoUrl: match[5] || '',
-        repoUrl: match[6] || ''
+        repoUrl: match[6] || '',
+        imagenes: match[7] ? match[7].split(',').map(i => i.trim().replace(/'/g, '')).filter(i => i) : []
       });
     }
     return projects;
