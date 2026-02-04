@@ -81,7 +81,10 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                      <div class="project-tags huge-tags">
                         @if (parsedData()?.stack) {
                             @for (tech of parsedData().stack; track tech) {
-                                <span [style]="getTechStyle(tech)">{{ tech }}</span>
+                                <span [style]="getTechStyle(tech)" style="display: inline-flex; align-items: center; gap: 5px;">
+                                  <i [class]="getTechIcon(tech)"></i>
+                                  {{ tech }}
+                                </span>
                             }
                         } @else {
                              <!-- Fallback por si falla el parseo o antes de sincronizar -->
@@ -101,83 +104,67 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                     <div class="projects-grid" style="display: flex; flex-direction: column; gap: 20px;">
                       @for (proj of parsedData(); track proj.nombre) {
                         <div class="project-card" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 5px; border: none;">
-                           <div class="contact-list" style="gap: 8px;">
-                              <div class="contact-item">
-                                <span class="label" style="width: 100px;">Proyecto:</span>
-                                <span class="value" style="color: #4ec9b0; font-weight: bold;">{{ proj.nombre }}</span>
-                              </div>
-
-                              <div class="contact-item" style="align-items: flex-start;">
-                                <span class="label" style="width: 100px;">Descripción:</span>
-                                <p class="value" style="margin: 0; line-height: 1.6; white-space: pre-line; flex: 1;">{{ proj.descripcion }}</p>
-                              </div>
-                              
-                              <div class="contact-item" style="align-items: flex-start;">
-                                 <span class="label" style="width: 100px;">Stack:</span>
-                                 <div class="project-tags huge-tags" style="margin-top: 5px;">
-                                    @for (tag of proj.tags; track tag) {
-                                      <span [style]="getTechStyle(tag)">{{ tag }}</span>
-                                    }
-                                 </div>
-                              </div>
-
-                              <div class="contact-item">
-                                <span class="label" style="width: 100px;">Estado:</span>
-                                 <div class="status" [class.finished]="proj.estado === 'Completado'" [class.in-progress]="proj.estado === 'En Progreso'" style="font-size: 1em; padding: 5px 10px;">{{ proj.estado }}</div>
-                              </div>
-
-                               <!-- Carrusel de Imágenes del Proyecto -->
-                               @if (proj.imagenes && proj.imagenes.length > 0) {
-                                 <div class="contact-item" style="flex-direction: column; align-items: flex-start;">
-                                   <span class="label" style="width: 100px; margin-bottom: 10px;">Galería:</span>
-                                   
-                                   <div class="carousel-container">
-                                     <button class="carousel-control prev" (click)="prevImage(proj.nombre, proj.imagenes.length)">
-                                       <i class="pi pi-chevron-left"></i>
-                                     </button>
-
-                                     <div class="carousel-slide" (click)="selectedImage.set(proj.imagenes[getCarouselIndex(proj.nombre)])">
-                                       <img [src]="proj.imagenes[getCarouselIndex(proj.nombre)]" alt="Project Screenshot" class="carousel-img">
-                                       <div class="carousel-counter">
-                                         {{ getCarouselIndex(proj.nombre) + 1 }} / {{ proj.imagenes.length }}
-                                       </div>
-                                     </div>
-
-                                     <button class="carousel-control next" (click)="nextImage(proj.nombre, proj.imagenes.length)">
-                                       <i class="pi pi-chevron-right"></i>
-                                     </button>
-                                   </div>
-                                 </div>
-                               }
-
-                               <!-- Modal / Lightbox -->
-                               @if (selectedImage()) {
-                                 <div class="lightbox-overlay" (click)="selectedImage.set(null)">
-                                   <div class="lightbox-content" (click)="$event.stopPropagation()">
-                                     <button class="close-btn" (click)="selectedImage.set(null)">
-                                       <i class="pi pi-times"></i>
-                                     </button>
-                                     <img [src]="selectedImage()" alt="Full Screenshot" class="full-img">
-                                   </div>
-                                 </div>
-                               }
-
-                               <!-- Botones de Acción -->
-                               @if (proj.demoUrl || proj.repoUrl) {
-                                 <div class="contact-item" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; display: flex; gap: 10px; justify-content: flex-start;">
-                                   @if (proj.demoUrl) {
-                                     <a [href]="proj.demoUrl" target="_blank" class="social-btn" style="min-width: auto; padding: 4px 12px; font-size: 12px;">
-                                       <i class="pi pi-external-link"></i> Ver Demo
-                                     </a>
-                                   }
-                                   @if (proj.repoUrl) {
-                                     <a [href]="proj.repoUrl" target="_blank" class="social-btn" style="min-width: auto; padding: 4px 12px; font-size: 12px;">
-                                       <i class="pi pi-github"></i> Repositorio
-                                     </a>
-                                   }
-                                 </div>
-                               }
+                           <div class="project-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                               <h3 class="project-title" style="margin: 0; font-size: 20px; color: #4ec9b0; font-weight: 600;">
+                                 {{ proj.nombre }}
+                               </h3>
+                               <div class="status" [class.finished]="proj.estado === 'Completado'" [class.in-progress]="proj.estado === 'En Progreso'" style="font-size: 11px; padding: 4px 8px; font-weight: bold; border-radius: 4px;">{{ proj.estado }}</div>
                            </div>
+
+                           <div class="project-body" style="margin-bottom: 20px;">
+                             <p class="value" style="margin: 0; line-height: 1.6; white-space: pre-line; color: #cccccc; font-size: 15px;">{{ proj.descripcion }}</p>
+                           </div>
+                              
+                           <div class="project-stack" style="margin-bottom: 20px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px;">
+                              <span style="font-size: 12px; color: #666; margin-bottom: 8px; display: block; text-transform: uppercase; letter-spacing: 0.5px; font-weight: bold;">Tecnologías</span>
+                              <div class="project-tags huge-tags" style="display: inline-flex; flex-wrap: wrap; gap: 8px;">
+                                 @for (tag of proj.tags; track tag) {
+                                  <span [style]="getTechStyle(tag)" style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px;">
+                                     <i [class]="getTechIcon(tag)" style="font-size: 14px;"></i>
+                                     {{ tag }}
+                                   </span>
+                                 }
+                              </div>
+                           </div>
+
+                           <!-- Carrusel de Imágenes del Proyecto -->
+                           @if (proj.imagenes && proj.imagenes.length > 0) {
+                             <div class="project-gallery" style="margin-bottom: 20px;">
+                               <div class="carousel-container">
+                                 <button class="carousel-control prev" (click)="prevImage(proj.nombre, proj.imagenes.length)">
+                                   <i class="pi pi-chevron-left"></i>
+                                 </button>
+
+                                 <div class="carousel-slide" (click)="selectedImage.set(proj.imagenes[getCarouselIndex(proj.nombre)])">
+                                   <img [src]="proj.imagenes[getCarouselIndex(proj.nombre)]" alt="Project Screenshot" class="carousel-img">
+                                   <div class="carousel-counter">
+                                     {{ getCarouselIndex(proj.nombre) + 1 }} / {{ proj.imagenes.length }}
+                                   </div>
+                                 </div>
+
+                                 <button class="carousel-control next" (click)="nextImage(proj.nombre, proj.imagenes.length)">
+                                   <i class="pi pi-chevron-right"></i>
+                                 </button>
+                               </div>
+                             </div>
+                           }
+
+                           <!-- Botones de Acción -->
+                           @if (proj.demoUrl || proj.repoUrl) {
+                             <div class="project-actions" style="margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 15px; display: flex; gap: 10px; justify-content: flex-start;">
+                               @if (proj.demoUrl) {
+                                 <a [href]="proj.demoUrl" target="_blank" class="social-btn" style="min-width: auto; padding: 6px 16px; font-size: 13px;">
+                                   <i class="pi pi-external-link"></i> Ver Demo
+                                 </a>
+                               }
+                               @if (proj.repoUrl) {
+                                 <a [href]="proj.repoUrl" target="_blank" class="social-btn" style="min-width: auto; padding: 6px 16px; font-size: 13px;">
+                                   <i class="pi pi-github"></i> Repositorio
+                                 </a>
+                               }
+                             </div>
+                           }
+
                         </div>
                       }
                     </div>
@@ -195,18 +182,18 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                     <div class="education-list">
                       @for (edu of parsedData().formacion; track edu.titulo) {
                         <div class="edu-item" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 6px;">
-                           <div class="contact-list" style="gap: 8px;">
+                           <div class="contact-list" style="gap: 5px;">
                               <div class="contact-item">
-                                <span class="label" style="width: 100px;">Título:</span>
-                                <span class="value" style="color: #4ec9b0; font-weight: bold;">{{ edu.titulo }}</span>
+                                <span class="label">titulo:</span>
+                                <span class="value" style="color: #ce9178; font-weight: bold;">{{ edu.titulo }}</span>
                               </div>
                               <div class="contact-item">
-                                <span class="label" style="width: 100px;">Institución:</span>
-                                <span class="value">{{ edu.institucion }}</span>
+                                <span class="label">institucion:</span>
+                                <span class="value" style="color: #ce9178;">{{ edu.institucion }}</span>
                               </div>
                               <div class="contact-item">
-                                <span class="label" style="width: 100px;">Año:</span>
-                                <span class="value">{{ edu.anio }}</span>
+                                <span class="label">anio:</span>
+                                <span class="value" style="color: #b5cea8;">{{ edu.anio }}</span>
                               </div>
                            </div>
                         </div>
@@ -222,21 +209,21 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                     <div class="education-list">
                       @for (exp of parsedData().experiencia; track exp.puesto) {
                         <div class="edu-item" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 6px;">
-                           <div class="contact-list" style="gap: 8px;">
+                           <div class="contact-list" style="gap: 5px;">
                               <div class="contact-item">
-                                <span class="label" style="width: 100px;">Puesto:</span>
-                                <span class="value" style="color: #4ec9b0; font-weight: bold;">{{ exp.puesto }}</span>
+                                <span class="label">puesto:</span>
+                                <span class="value" style="color: #ce9178; font-weight: bold;">{{ exp.puesto }}</span>
                               </div>
                               <div class="contact-item">
-                                <span class="label" style="width: 100px;">Empresa:</span>
-                                <span class="value">{{ exp.empresa }}</span>
+                                <span class="label">empresa:</span>
+                                <span class="value" style="color: #ce9178;">{{ exp.empresa }}</span>
                               </div>
                               <div class="contact-item">
-                                <span class="label" style="width: 100px;">Periodo:</span>
-                                <span class="value">{{ exp.periodo }}</span>
+                                <span class="label">periodo:</span>
+                                <span class="value" style="color: #ce9178;">{{ exp.periodo }}</span>
                               </div>
                               <div class="contact-item" style="align-items: flex-start;">
-                                <span class="label" style="width: 100px;">Descripción:</span>
+                                <span class="label">descripcion:</span>
                                 <p class="value" style="margin: 0; line-height: 1.5; flex: 1; white-space: pre-line;">{{ exp.descripcion }}</p>
                               </div>
                            </div>
@@ -250,14 +237,11 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                     <h2 class="role-title" style="margin-bottom: 20px;">
                     Intereses
                     </h2>
-                    <div class="education-list">
-                      @for (int of parsedData().intereses; track int) {
-                        <div class="edu-item" style="padding: 10px 15px; background: rgba(255,255,255,0.03); border-radius: 6px; display: flex; align-items: center;">
-                           <i class="pi pi-circle-fill" style="font-size: 6px; margin-right: 15px; color: #4ec9b0;"></i>
-                           <span class="value" style="color: #4ec9b0; font-weight: bold; font-size: 15px;">{{ int }}</span>
-                        </div>
-                      }
-                    </div>
+                     <div class="education-list" style="display: flex; flex-wrap: wrap; align-items: center; gap: 5px; padding-left: 10px;">
+                       @for (int of parsedData().intereses; track int; let last = $last) {
+                         <span class="value" style="color: #ce9178;">{{ int }}</span>@if(!last){<span style="color: #666; margin-right: 5px;">,</span>}
+                       }
+                     </div>
                   </div>
                 </div>
               }
@@ -271,10 +255,15 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                     
                     <div class="skills-section">
                        <div class="edu-item" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 6px;">
-                          <h3 style="color: #4ec9b0; margin-bottom: 15px; font-size: 16px;">Frontend</h3>
-                          <div class="project-tags huge-tags">
+                          <div style="margin-bottom: 10px;">
+                              <span class="label" style="font-size: 16px;">frontend:</span>
+                          </div>
+                          <div class="project-tags huge-tags" style="padding-left: 15px;">
                             @for (skill of parsedData().frontend; track skill) {
-                              <span style="border: 1px solid #569cd6; color: #569cd6; background: rgba(86, 156, 214, 0.1);">{{ skill }}</span>
+                              <span style="border: 1px solid #569cd6; color: #569cd6; background: rgba(86, 156, 214, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 5px;">
+                                <i [class]="getTechIcon(skill)"></i>
+                                {{ skill }}
+                              </span>
                             }
                           </div>
                        </div>
@@ -282,10 +271,15 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
                     <div class="skills-section" style="margin-top: 15px;">
                        <div class="edu-item" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 6px;">
-                          <h3 style="color: #4ec9b0; margin-bottom: 15px; font-size: 16px;">Backend</h3>
-                          <div class="project-tags huge-tags">
+                          <div style="margin-bottom: 10px;">
+                              <span class="label" style="font-size: 16px;">backend:</span>
+                          </div>
+                          <div class="project-tags huge-tags" style="padding-left: 15px;">
                             @for (skill of parsedData().backend; track skill) {
-                              <span style="border: 1px solid #ce9178; color: #ce9178; background: rgba(206, 145, 120, 0.1);">{{ skill }}</span>
+                              <span style="border: 1px solid #ce9178; color: #ce9178; background: rgba(206, 145, 120, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 5px;">
+                                <i [class]="getTechIcon(skill)"></i>
+                                {{ skill }}
+                              </span>
                             }
                           </div>
                        </div>
@@ -293,10 +287,15 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
                     <div class="skills-section" style="margin-top: 15px;">
                        <div class="edu-item" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 6px;">
-                          <h3 style="color: #4ec9b0; margin-bottom: 15px; font-size: 16px;">Herramientas</h3>
-                          <div class="project-tags huge-tags">
+                          <div style="margin-bottom: 10px;">
+                              <span class="label" style="font-size: 16px;">herramientas:</span>
+                          </div>
+                          <div class="project-tags huge-tags" style="padding-left: 15px;">
                             @for (tool of parsedData().herramientas; track tool) {
-                              <span style="border: 1px solid #4ec9b0; color: #4ec9b0; background: rgba(78, 201, 176, 0.1);">{{ tool }}</span>
+                              <span style="border: 1px solid #4ec9b0; color: #4ec9b0; background: rgba(78, 201, 176, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 5px;">
+                                <i [class]="getTechIcon(tool)"></i>
+                                {{ tool }}
+                              </span>
                             }
                           </div>
                        </div>
@@ -304,10 +303,15 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
                     <div class="skills-section" style="margin-top: 15px;">
                        <div class="edu-item" style="padding: 15px; background: rgba(255,255,255,0.03); border-radius: 6px;">
-                          <h3 style="color: #4ec9b0; margin-bottom: 15px; font-size: 16px;">Bases de datos</h3>
-                          <div class="project-tags huge-tags">
+                          <div style="margin-bottom: 10px;">
+                              <span class="label" style="font-size: 16px;">bases_de_datos:</span>
+                          </div>
+                          <div class="project-tags huge-tags" style="padding-left: 15px;">
                             @for (tool of parsedData().bases_de_datos; track tool) {
-                              <span style="border: 1px solid #4ec9b0; color: #4ec9b0; background: rgba(78, 201, 176, 0.1);">{{ tool }}</span>
+                              <span style="border: 1px solid #4ec9b0; color: #4ec9b0; background: rgba(78, 201, 176, 0.1); padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 5px;">
+                                <i [class]="getTechIcon(tool)"></i>
+                                {{ tool }}
+                              </span>
                             }
                           </div>
                        </div>
@@ -324,17 +328,17 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                     </h2>
                     
                     <div class="contact-list" style="gap: 15px;">
-                      <div class="contact-item">
-                         <span class="label" style="width: 100px;">Email:</span>
-                         <span class="value" style="color: #4ec9b0; font-weight: bold;">{{ parsedData().email }}</span>
-                      </div>
-                      @if (parsedData().telefono) {
-                        <div class="contact-item">
-                           <span class="label" style="width: 100px;">Teléfono:</span>
-                           <span class="value">{{ parsedData().telefono }}</span>
-                        </div>
-                      }
-                    </div>
+                       <div class="contact-item">
+                          <span class="label">email:</span>
+                          <span class="value" style="color: #ce9178; font-weight: bold;">{{ parsedData().email }}</span>
+                       </div>
+                       @if (parsedData().telefono) {
+                         <div class="contact-item">
+                            <span class="label">telefono:</span>
+                            <span class="value" style="color: #b5cea8;">{{ parsedData().telefono }}</span>
+                         </div>
+                       }
+                     </div>
 
                     <div class="contact-footer" style="margin-top: 30px; font-style: italic; color: var(--vscode-accent);">
                       {{ parsedData().footer }}
@@ -535,10 +539,27 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
     
     .project-card {
       background-color: #252526;
-      padding: 20px;
+      padding: 24px;
       border-radius: 8px;
       border: 1px solid #3e3e42;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .project-title {
+       margin: 0; 
+       font-size: 22px; 
+       color: #ffffff; /* High contrast white */
+       font-weight: 700;
+       letter-spacing: -0.5px;
+    }
+
+    .project-desc {
+       margin: 0; 
+       line-height: 1.6; 
+       white-space: pre-line; 
+       color: #d4d4d4; /* Light gray for better readability */
+       font-size: 15px;
     }
 
     .projects-grid {
@@ -550,23 +571,18 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
     .status {
       display: inline-block;
-      margin-top: 10px;
       font-size: 11px;
-      padding: 2px 6px;
-      border-radius: 3px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    .status.finished { background-color: rgba(76, 175, 80, 0.2); color: #4caf50; }
-    .status.in-progress { background-color: rgba(33, 150, 243, 0.2); color: #2196f3; }
+    .status.finished { background-color: rgba(76, 175, 80, 0.2); color: #4caf50; border: 1px solid rgba(76, 175, 80, 0.3); }
+    .status.in-progress { background-color: rgba(33, 150, 243, 0.2); color: #2196f3; border: 1px solid rgba(33, 150, 243, 0.3); }
     
     .project-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-    .project-tags span {
-      background-color: #2d2d2d;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      color: var(--vscode-text);
-    }
-
+    
     .contact-list {
       display: flex;
       flex-direction: column;
@@ -582,16 +598,26 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
     }
 
     .contact-item .label {
-      font-weight: 600;
-      color: #569cd6;
-      width: 100px;
+      font-weight: 400; 
+      color: #9cdcfe; 
+      width: auto; 
+      margin-right: 0;
       flex-shrink: 0;
     }
 
     .contact-item .value {
-      color: #ce9178;
+      color: #ce9178; 
       word-break: break-all;
       flex: 1;
+    }
+    
+    .punctuation {
+      color: #d4d4d4; /* Gray for : , { } */
+      margin-right: 5px;
+    }
+
+    .keyword {
+        color: #569cd6; /* Blue for const, new, etc */
     }
 
     .line-numbers {
@@ -1001,6 +1027,40 @@ export class CodeEditorComponent {
     else {
       return 'border: 1px solid #4ec9b0; color: #4ec9b0; background: rgba(78, 201, 176, 0.1); padding: 4px 8px; border-radius: 4px; font-size: 12px;';
     }
+  }
+
+  getTechIcon(tech: string): string {
+    const t = tech.toLowerCase();
+    const icons: { [key: string]: string } = {
+      'angular': 'devicon-angularjs-plain',
+      'typescript': 'devicon-typescript-plain',
+      'javascript': 'devicon-javascript-plain',
+      'html': 'devicon-html5-plain',
+      'css': 'devicon-css3-plain',
+      'scss': 'devicon-sass-original',
+      'react': 'devicon-react-original',
+      'vue': 'devicon-vuejs-plain',
+      'java': 'devicon-java-plain',
+      'spring': 'devicon-spring-plain',
+      'spring boot': 'devicon-spring-plain',
+      'node': 'devicon-nodejs-plain',
+      'express': 'devicon-express-original',
+      'python': 'devicon-python-plain',
+      'php': 'devicon-php-plain',
+      'c#': 'devicon-csharp-plain',
+      'postgresql': 'devicon-postgresql-plain',
+      'mysql': 'devicon-mysql-plain',
+      'mongodb': 'devicon-mongodb-plain',
+      'git': 'devicon-git-plain',
+      'docker': 'devicon-docker-plain',
+    };
+
+    for (const key in icons) {
+      if (t.includes(key)) {
+        return icons[key];
+      }
+    }
+    return 'pi pi-code'; // Fallback icon
   }
 
   showPreview = computed(() => {

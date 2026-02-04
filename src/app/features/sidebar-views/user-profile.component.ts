@@ -18,22 +18,22 @@ import { CommonModule } from '@angular/common';
           </div>
           <div class="profile-info">
             <h2>Andrés Serrano</h2>
-            <p>Full Stack Developer</p>
+            <p>Desarrollador de Software</p>
           </div>
         </div>
 
         <div class="stats-section">
           <div class="stat-item">
             <span class="stat-label">Ubicación:</span>
-            <span class="stat-value">Colombia</span>
+            <span class="stat-value">Ecuador</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">Experiencia:</span>
-            <span class="stat-value">3+ años</span>
+            <span class="stat-value">1+ años</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">Proyectos:</span>
-            <span class="stat-value">15+ realizados</span>
+            <span class="stat-value">3+ realizados</span>
           </div>
         </div>
 
