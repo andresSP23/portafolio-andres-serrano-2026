@@ -8,22 +8,48 @@ import { EditorState } from '../../state/editor.state';
     <aside class="activity-bar">
       <div 
         class="icon" 
-        [class.active]="editorState.isSidebarVisible()"
-        (click)="editorState.toggleSidebar()">
-        <i class="pi pi-copy" style="font-size: 1.5rem"></i>
+        [class.active]="editorState.isSidebarVisible() && editorState.activeSidebarTab() === 'explorer'"
+        (click)="editorState.setActiveSidebarTab('explorer')"
+        title="Explorador">
+        <i class="pi pi-copy"></i>
       </div>
-      <div class="icon">
-        <i class="pi pi-search" style="font-size: 1.5rem"></i>
+      <div 
+        class="icon" 
+        [class.active]="editorState.isSidebarVisible() && editorState.activeSidebarTab() === 'search'"
+        (click)="editorState.setActiveSidebarTab('search')"
+        title="Buscar">
+        <i class="pi pi-search"></i>
       </div>
-      <div class="icon">
-        <i class="pi pi-sitemap" style="font-size: 1.5rem"></i>
+      <div 
+        class="icon" 
+        [class.active]="editorState.isSidebarVisible() && editorState.activeSidebarTab() === 'source-control'"
+        (click)="editorState.setActiveSidebarTab('source-control')"
+        title="Control de código fuente">
+        <i class="pi pi-sitemap"></i>
       </div>
+      <div 
+        class="icon" 
+        [class.active]="editorState.isSidebarVisible() && editorState.activeSidebarTab() === 'extensions'"
+        (click)="editorState.setActiveSidebarTab('extensions')"
+        title="Extensiones">
+        <i class="pi pi-th-large"></i>
+      </div>
+      
       <div class="spacer"></div>
-      <div class="icon">
-        <i class="pi pi-user" style="font-size: 1.5rem"></i>
+
+      <div 
+        class="icon" 
+        [class.active]="editorState.isSidebarVisible() && editorState.activeSidebarTab() === 'user'"
+        (click)="editorState.setActiveSidebarTab('user')"
+        title="Perfil">
+        <i class="pi pi-user"></i>
       </div>
-      <div class="icon">
-        <i class="pi pi-cog" style="font-size: 1.5rem;"></i>
+      <div 
+        class="icon" 
+        [class.active]="editorState.isSidebarVisible() && editorState.activeSidebarTab() === 'settings'"
+        (click)="editorState.setActiveSidebarTab('settings')"
+        title="Configuración">
+        <i class="pi pi-cog"></i>
       </div>
     </aside>
   `,

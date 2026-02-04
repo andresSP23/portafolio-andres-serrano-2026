@@ -6,6 +6,11 @@ import { EditorTabsComponent } from '../features/editor-tabs/editor-tabs.compone
 import { CodeEditorComponent } from '../features/code-editor/code-editor.component';
 import { StatusBarComponent } from './status-bar.component';
 import { EditorState } from '../state/editor.state';
+import { SearchComponent } from '../features/sidebar-views/search.component';
+import { SourceControlComponent } from '../features/sidebar-views/source-control.component';
+import { UserProfileComponent } from '../features/sidebar-views/user-profile.component';
+import { SettingsComponent } from '../features/sidebar-views/settings.component';
+import { ExtensionsComponent } from '../features/sidebar-views/extensions.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -16,7 +21,12 @@ import { EditorState } from '../state/editor.state';
     ExplorerComponent,
     EditorTabsComponent,
     CodeEditorComponent,
-    StatusBarComponent
+    StatusBarComponent,
+    SearchComponent,
+    SourceControlComponent,
+    UserProfileComponent,
+    SettingsComponent,
+    ExtensionsComponent
   ],
   template: `
     <div class="main-container" [class.sidebar-hidden]="!editorState.isSidebarVisible()">
@@ -27,7 +37,14 @@ import { EditorState } from '../state/editor.state';
       <div 
         class="sidebar-area" 
         [class.visible]="editorState.isSidebarVisible()">
-        <app-explorer></app-explorer>
+        @switch (editorState.activeSidebarTab()) {
+          @case ('explorer') { <app-explorer></app-explorer> }
+          @case ('search') { <app-search></app-search> }
+          @case ('source-control') { <app-source-control></app-source-control> }
+          @case ('user') { <app-user-profile></app-user-profile> }
+          @case ('settings') { <app-settings></app-settings> }
+          @case ('extensions') { <app-extensions></app-extensions> }
+        }
       </div>
 
       <!-- Backdrop for mobile -->
