@@ -244,16 +244,16 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                       <!-- Stats Row (Dynamic or Static) -->
                       <div class="stats-row">
                         <div class="stat-item">
-                          <span class="stat-number">2<span class="orange-plus">+</span></span>
-                          <span class="stat-label">Years Exp.</span>
+                          <span class="stat-number">1<span class="orange-plus">+</span></span>
+                          <span class="stat-label">Años Exp.</span>
                         </div>
                          <div class="stat-item">
-                          <span class="stat-number">10<span class="orange-plus">+</span></span>
-                          <span class="stat-label">Projects</span>
+                          <span class="stat-number">3<span class="orange-plus">+</span></span>
+                          <span class="stat-label">Proyectos</span>
                         </div>
                          <div class="stat-item">
                           <span class="stat-number">100<span class="orange-plus">%</span></span>
-                          <span class="stat-label">Commitment</span>
+                          <span class="stat-label">Completados</span>
                         </div>
                       </div>
                     }

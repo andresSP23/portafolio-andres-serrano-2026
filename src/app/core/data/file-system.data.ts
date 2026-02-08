@@ -156,10 +156,10 @@ bases_de_datos:
         content: `## Contacto
 
 - **Email:** andres.serrano.puebla@gmail.com
-- **Email Provisional:** andres.provisional.dev@gmail.com
+- **Email Provisional:** andres.dx23@gmail.com
 - **Telefono:** 0999068118
 
-¡Me encanta que me contacten por teléfono!
+¡Prefiero que me contacten por teléfono!
 `
       }
     ]
