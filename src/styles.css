@@ -16,8 +16,8 @@
   --vscode-tab-inactive: #2d2d2d;
   --vscode-tab-active: #1e1e1e;
 
-  --font-mono: 'Consolas', 'Courier New', monospace;
-  --font-sans: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+  --font-sans: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Reset & Base */

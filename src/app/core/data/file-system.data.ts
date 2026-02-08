@@ -53,7 +53,8 @@ Usa la **Barra de Actividad** de la izquierda para navegar.
     {
       "titulo": "Tecnólogo Superior en Desarrollo de Software",
       "institucion": "Instituto Tecnológico Universitario Cordillera",
-      "anio": "2025"
+      "anio": "2025",
+      "registro": "2250-2024-3005395"
     }
   ],
   "experiencia": [
@@ -61,7 +62,7 @@ Usa la **Barra de Actividad** de la izquierda para navegar.
       "puesto": "Desarrollador JAVA",
       "empresa": "Secretaria Técnica de Gestión Inmobiliaria del Sector Publico “Inmobiliar”",
       "periodo": "2024/03-2024/08",
-      "descripcion": "Desarrollo e implementación de módulos empresariales utilizando Java EE 7 y PostgreSQL, incluyendo el diseño de procedimientos almacenados y triggers para garantizar la integridad y eficiencia de los datos.\\n\\nDiseño, optimización e integración de interfaces de usuario con PrimeFaces, asegurando una comunicación efectiva entre el backend y el frontend.\\n\\nExperiencia en soporte técnico y mantenimiento preventivo y correctivo de equipos de cómputo y redes.\\n\\nCapacitación y acompañamiento a usuarios finales en el uso eficiente de herramientas tecnológicas, orientado a la mejora de la productividad."
+      "descripcion": "• Desarrollo e implementación de módulos empresariales con Java EE 7 y PostgreSQL.\\n• Diseño y optimización de interfaces con PrimeFaces (Backend-Frontend).\\n• Mantenimiento y soporte técnico de infraestructura TI.\\n• Capacitación a usuarios para mejora de productividad."
     }
   ],
   "intereses": [
@@ -84,67 +85,30 @@ Usa la **Barra de Actividad** de la izquierda para navegar.
 
 export const proyectos = [
   {
-    nombre: 'Sistema de administracion de Gimnasios - GYM FLOW',
-    descripcion: \`Solución integral para la gestión operativa y financiera de centros deportivos, diseñada con una arquitectura robusta y escalable.
-
-STACK TECNOLÓGICO:
-• Lenguaje: Java 21 (LTS)
-• Framework Principal: Spring Boot 3.5
-• Persistencia: Spring Data JPA con Hibernate y PostgreSQL
-• Seguridad: Spring Security con autenticación basada en JWT (Stateless)
-• Gestión de Base de Datos: Migraciones automatizadas con Flyway
-• Generación de Documentos: iTextPDF para contratos y reportes dinámicos
-• Documentación de API: OpenAPI / Swagger (Springdoc)
-
-CAPACIDADES DEL SISTEMA:
-1. Gestión de Socios y Membresías: Control de suscripciones (Activo, Vencido, Pendiente), contratos dinámicos en PDF, seguimiento físico y control de asistencia.
-2. Control Financiero y Contabilidad: Gestión de sesiones de caja, flujo de caja (ingresos/egresos), conciliación bancaria y categorización de gastos.
-3. Ventas e Inventario: Punto de Venta (POS), control de stock inteligente y categorización comercial.
-4. Infraestructura y Mantenimiento: Gestión de activos físicos y programación de mantenimientos preventivos/correctivos automáticos.
-5. Inteligencia de Negocios: Métricas en tiempo real, análisis de tendencias y top de ventas.
-
-ARQUITECTURA Y PATRONES:
-Diseño Orientado a Dominios (DDD), Clean Code & SOLID, Seguridad Multicapa e Integración Transaccional para garantizar la integridad de los datos.\`,
+    nombre: 'GYM FLOW',
+    descripcionCorta: 'Solución integral para la gestión operativa y financiera de centros deportivos, diseñada con una arquitectura robusta y escalable.',
+    stack: [
+      { name: 'Java 21 (LTS)', icon: 'java' },
+      { name: 'Spring Boot 3.5', icon: 'spring' },
+      { name: 'PostgreSQL', icon: 'postgresql' },
+      { name: 'JWT', icon: 'key' },
+      { name: 'Flyway', icon: 'database' }
+    ],
+    capacidades: [
+      'Gestión de Socios y Membresías: Control de suscripciones (Activo, Vencido, Pendiente), contratos dinámicos.',
+      'Control Financiero: Gestión de caja, ingresos/egresos y conciliación bancaria.',
+      'Ventas e Inventario: Punto de Venta (POS) y control de stock inteligente.',
+      'Infraestructura: Gestión de activos y mantenimientos.',
+      'BI: Métricas en tiempo real y análisis de tendencias.'
+    ],
+    arquitectura: 'Diseño Orientado a Dominios (DDD), Clean Code & SOLID, Seguridad Multicapa e Integración Transaccional.',
     tags: ['Java 21', 'Spring Boot 3.5', 'PostgreSQL', 'JWT', 'Flyway'],
     estado: 'Completado',
-    demoUrl: '#', 
-    repoUrl: 'https://github.com/andresSP23',
-    imagenes: [
-      'gym-flow/Screenshot 2026-02-03 183901.webp',
-      'gym-flow/Screenshot 2026-02-03 184007.webp',
-      'gym-flow/Screenshot 2026-02-03 184036.webp',
-      'gym-flow/Screenshot 2026-02-03 184121.webp',
-      'gym-flow/Screenshot 2026-02-03 184145.webp',
-      'gym-flow/Screenshot 2026-02-03 184219 (1).webp',
-      'gym-flow/Screenshot 2026-02-03 184219.webp',
-      'gym-flow/Screenshot 2026-02-03 184259.webp',
-      'gym-flow/Screenshot 2026-02-03 184340.webp',
-      'gym-flow/Screenshot 2026-02-03 184412.webp',
-      'gym-flow/Screenshot 2026-02-03 184511.webp',
-      'gym-flow/Screenshot 2026-02-03 184546.webp',
-      'gym-flow/Screenshot 2026-02-03 184611.webp',
-      'gym-flow/Screenshot 2026-02-03 184830.webp',
-      'gym-flow/Screenshot 2026-02-03 184910.webp',
-      'gym-flow/Screenshot 2026-02-03 184949.webp',
-      'gym-flow/Screenshot 2026-02-03 185014.webp',
-      'gym-flow/Screenshot 2026-02-03 185042.webp',
-      'gym-flow/Screenshot 2026-02-03 185115.webp',
-      'gym-flow/Screenshot 2026-02-03 185149.webp',
-      'gym-flow/Screenshot 2026-02-03 185211.webp',
-      'gym-flow/Screenshot 2026-02-03 185246.webp',
-      'gym-flow/Screenshot 2026-02-03 185303.webp',
-      'gym-flow/Screenshot 2026-02-03 185320.webp',
-      'gym-flow/Screenshot 2026-02-03 185339.webp'
-    ]
+    demoUrl: 'https://sistma-gym-frontend-angular.vercel.app/login', 
+    repoUrl: 'https://github.com/andresSP23/',
+    bannerUrl: 'gym-flow/GYMFLOW.webp'
   },
-  {
-    nombre: 'VS Code Portfolio',
-    descripcion: 'Este portafolio simulando un IDE con funcionalidades de navegación, búsqueda y edición simulada.',
-    tags: ['Angular', 'Signals', 'TypeScript'],
-    estado: 'En Progreso',
-    demoUrl: '#',
-    repoUrl: 'https://github.com/andresSP23/portafolio-andres-serrano-2026'
-  }
+
 ];`
       },
       {
@@ -192,9 +156,10 @@ bases_de_datos:
         content: `## Contacto
 
 - **Email:** andres.serrano.puebla@gmail.com
+- **Email Provisional:** andres.provisional.dev@gmail.com
 - **Telefono:** 0999068118
 
-¡Hablemos de código!
+¡Me encanta que me contacten por teléfono!
 `
       }
     ]
