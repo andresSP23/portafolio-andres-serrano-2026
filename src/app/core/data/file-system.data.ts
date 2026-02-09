@@ -20,6 +20,9 @@ Usa la **Barra de Actividad** de la izquierda para navegar.
 
 ### Inicio Rápido
 ¡Haz clic en \`inicio.ts\` para ver mi perfil!
+
+> **Tips VS Code**: 
+> Puedes alternar entre la **Vista de Código** y la **Vista Previa (UI)** usando el botón de "Ojo" 👁️ en la esquina superior derecha de cada archivo.
 `
       },
       {

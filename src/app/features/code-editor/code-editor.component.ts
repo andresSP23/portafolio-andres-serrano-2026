@@ -39,7 +39,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
               @if (activeFile()!.id === 'inicio') {
                 <div class="portfolio-view home-view">
                   <!-- Hero Section - Layout Horizontal -->
-                  <div class="hero-landing">
+                  <div class="hero-landing ">
                     <div class="hero-left">
                       <div class="greeting">
                         <span class="hello-text">Hola<span class="accent-dot">.</span></span>
@@ -192,35 +192,55 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                 <div class="portfolio-view about-view-split">
                   <!-- Left Column: Experience List (Navigation) -->
                   <div class="about-left">
+                     <!-- Mobile Only Tabs -->
+                     <div class="section-tabs mobile-only">
+                       <button class="tab-btn" 
+                               [class.active]="activeSection() === 'experience'" 
+                               (click)="setActiveSection('experience', 0)">
+                         Experiencia
+                       </button>
+                       <button class="tab-btn" 
+                               [class.active]="activeSection() === 'education'" 
+                               (click)="setActiveSection('education', 0)">
+                         Formación
+                       </button>
+                     </div>
+
                      @if (parsedData().experiencia && parsedData().experiencia.length > 0) {
-                      <h3 class="nav-title-sm">Experiencia</h3>
-                      <div class="services-list">
-                        <!-- Navigation Items -->
-                        @for (exp of parsedData().experiencia; track exp.puesto; let i = $index) {
-                          <div class="service-row" 
-                               [class.active]="activeSection() === 'experience' && activeExperience() === i"
-                               (click)="setActiveSection('experience', i)"
-                               style="cursor: pointer;">
-                            <div class="service-indicator"></div>
-                            <span class="service-name">{{ exp.puesto }}</span>
-                          </div>
-                        }
+                      <!-- Experience List Wrapper -->
+                      <!-- Hide on mobile if section is NOT experience (i.e. 'mobile-hidden-section' class applied) -->
+                      <div class="experience-wrapper" [class.mobile-hidden-section]="activeSection() !== 'experience'">
+                        <h3 class="nav-title-sm desktop-only">Experiencia</h3>
+                        <div class="services-list">
+                          @for (exp of parsedData().experiencia; track exp.puesto; let i = $index) {
+                            <div class="service-row" 
+                                 [class.active]="activeSection() === 'experience' && activeExperience() === i"
+                                 (click)="setActiveSection('experience', i)"
+                                 style="cursor: pointer;">
+                              <div class="service-indicator"></div>
+                              <span class="service-name">{{ exp.puesto }}</span>
+                            </div>
+                          }
+                        </div>
                       </div>
                      }
 
                      @if (parsedData().formacion && parsedData().formacion.length > 0) {
-                      <h3 class="nav-title-sm" style="margin-top: 30px;">Formación</h3>
-                      <div class="services-list">
-                        <!-- Navigation Items -->
-                        @for (edu of parsedData().formacion; track edu.titulo; let i = $index) {
-                          <div class="service-row" 
-                               [class.active]="activeSection() === 'education' && activeEducation() === i"
-                               (click)="setActiveSection('education', i)"
-                               style="cursor: pointer;">
-                            <div class="service-indicator"></div>
-                            <span class="service-name">{{ edu.titulo }}</span>
-                          </div>
-                        }
+                      <!-- Education List Wrapper -->
+                      <!-- Hide on mobile if section is NOT education -->
+                      <div class="education-wrapper" [class.mobile-hidden-section]="activeSection() !== 'education'">
+                        <h3 class="nav-title-sm desktop-only" style="margin-top: 30px;">Formación</h3>
+                        <div class="services-list">
+                          @for (edu of parsedData().formacion; track edu.titulo; let i = $index) {
+                            <div class="service-row" 
+                                 [class.active]="activeSection() === 'education' && activeEducation() === i"
+                                 (click)="setActiveSection('education', i)"
+                                 style="cursor: pointer;">
+                              <div class="service-indicator"></div>
+                              <span class="service-name">{{ edu.titulo }}</span>
+                            </div>
+                          }
+                        </div>
                       </div>
                      }
                   </div>
@@ -280,7 +300,9 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
               @if (activeFile()!.id === 'habilidades' && parsedData()) {
                 <div class="portfolio-view skills-view-centered">
-                  <div class="projects-header-centered">
+                  <!-- Use hero-landing style for the card container -->
+                  <div class="hero-landing skills-card-container" style="flex-direction: column; align-items: stretch; gap: 30px;">
+                    <div class="projects-header-centered">
                     <h1 class="projects-title-lg">Habilidades Técnicas</h1>
                     <div class="title-line-vertical"></div>
                   </div>
@@ -347,12 +369,12 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                     </div>
                   </div>
                 </div>
+              </div>
               }
 
               @if (activeFile()!.id === 'contacto' && parsedData()) {
-                <div class="portfolio-view">
-                  <div class="contact-section">
-                  <div class="contact-content-wrapper">
+                <div class="portfolio-view contact-view">
+                  <div class="hero-landing contact-content-wrapper" style="flex-direction: column; align-items: stretch; gap: 30px;">
                     <!-- Left: Header -->
                     <div class="contact-left">
                       <div class="contact-label-top">
@@ -401,13 +423,13 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                         </div>
                       }
                     </div>
-                  </div> <!-- Close content-wrapper -->
+                  </div>
 
                   <!-- Footer -->
                   <footer class="portfolio-footer-dark">
                     <div class="footer-content">
                       <h3 class="footer-name">Andres Serrano</h3>
-                      <p class="footer-desc">Designed with love, all rights reserved.</p>
+                      <p class="footer-desc">Diseñado con amor, todos los derechos reservados.</p>
                       <div class="footer-socials">
                         @if (parsedData()?.email) {
                           <a [href]="'mailto:' + parsedData().email" class="social-circle"><i class="pi pi-envelope"></i></a>
@@ -417,7 +439,6 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                       </div>
                     </div>
                   </footer>
-                  </div>
                 </div>
               }
             </div>
@@ -496,6 +517,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
       overflow-y: auto;
       flex: 1;
       width: 100%;
+      
     }
 
     /* ==========================================
@@ -858,7 +880,6 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
       padding: 60px 20px; /* Increased padding */
       /* Background Gradient from Home */
       background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #141414 100%);
-      border-radius: 20px; /* Optional: adds nice containment */
     }
 
     .about-left {
@@ -1110,7 +1131,6 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
       max-width: 1200px;
       margin: 0 auto;
       background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #141414 100%);
-      border-radius: 20px;
     }
 
     .projects-header-centered {
@@ -1923,29 +1943,37 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
     .skills-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 40px;
+      grid-template-columns: 1fr 1fr; /* Strict 2 columns for symmetry */
+      gap: 50px; /* More breathing room */
+      width: 100%;
       margin-top: 20px;
     }
 
     .skill-category {
-      background: transparent;
-      border: none;
+      background: transparent; /* No extra card bg */
       padding: 0;
-      transition: all 0.3s ease;
+      border: none;
+      transition: transform 0.2s ease;
+    }
+
+    .skill-category:hover {
+      background: transparent;
+      transform: translateY(0); /* Remove hover lift */
     }
 
     .skill-category-title {
       font-family: var(--font-sans);
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       color: #fff;
-      margin: 0 0 24px;
+      margin: 0 0 16px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       text-transform: uppercase;
       letter-spacing: 1px;
+      /* Border removed for cleaner look */
+      padding-bottom: 0;
     }
 
     .skill-category-title i {
@@ -1959,10 +1987,20 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
       gap: 10px;
     }
 
+    .skills-view-centered {
+      max-width: 100%; /* Full width */
+      margin: 0 auto;
+      padding-bottom: 40px;
+    }
+
     /* Contact Section */
+    .contact-view {
+      max-width: 100%;
+    }
+
     .contact-section {
       text-align: left; /* Override previous center */
-      max-width: 1000px;
+      max-width: 100%; /* Full width */
       margin: 0 auto;
       padding: 0 20px 40px;
     }
@@ -3015,27 +3053,510 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
       }
     }
 
-    @media (max-width: 480px) {
-      .hello-text {
-        font-size: 36px;
+    /* ==========================================
+       RESPONSIVE DESIGN (TABLET & MOBILE)
+       ========================================== */
+    /* Utility classes for mobile-specific logic */
+    .mobile-only {
+      display: none !important;
+    }
+
+    /* Tablet & Small Desktop (max-width: 1024px) */
+    @media (max-width: 1024px) {
+      .about-view-split {
+        gap: 40px;
+        padding: 40px 20px;
       }
 
-      .intro-line {
-        font-size: 20px;
+      .hero-landing {
+        padding: 40px;
+      }
+    }
+
+    /* Tablet (max-width: 768px) */
+    @media (max-width: 768px) {
+      /* Enable mobile-only elements */
+      .section-tabs.mobile-only {
+        display: flex !important;
       }
 
-      .main-title {
-        font-size: 24px;
+      /* Allow hiding elements on mobile based on class */
+      .mobile-hidden-section {
+        display: none !important;
       }
 
-      .cta-buttons {
+      /* ABOUT SECTION TABS (Mobile Only) */
+      .section-tabs {
+        display: none; /* Default hidden, shown via .mobile-only */
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 8px;
+        padding: 4px;
+        gap: 6px;
+        margin-bottom: 20px;
+        border: 1px solid rgba(255,255,255,0.05);
+      }
+  
+      .tab-btn {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #888;
+        padding: 8px 12px;
+        font-family: var(--font-sans);
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+      }
+  
+      .tab-btn:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.05);
+      }
+  
+      .tab-btn.active {
+        background: #ff6b35; /* Orange accent */
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+        font-weight: 600;
+      }
+
+      /* General Layout - FIX for README Visibility */
+      .split-view {
         flex-direction: column;
+      }
+
+      .code-column {
+        min-width: 100%;
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--vscode-border);
+        /* display: flex to ensure it shows when rendered by Angular */
+        display: flex; 
+        flex: 1;
+      }
+      
+      /* Logic to show code if NO preview is active: 
+         We'll add a class 'visible-mobile' dynamically or rely on structural directives.
+         Better yet: The template uses *ngIf="codeVisible() || !showPreview()".
+         If showPreview() is false (like for README), codeVisible is true.
+         So we just need to ensure .code-column is display:flex when it exists.
+      */
+      
+      .code-column.mobile-visible {
+        display: flex;
+        flex: 1;
+      }
+
+      .preview-column {
+        flex: 1;
         width: 100%;
       }
 
-      .btn-accent,
-      .btn-outline-light,
-      .btn-linkedin {
+      /* Helper classes for mobile visibility toggling */
+      .mobile-hidden {
+        display: none !important;
+      }
+      
+      .mobile-visible {
+        display: flex !important;
+      }
+
+      .portfolio-view {
+        padding-bottom: 80px; 
+        max-width: 100%;
+      }
+
+      /* Home / Hero Section */
+      .hero-landing {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        padding: 40px 20px;
+        min-height: auto;
+        gap: 40px;
+        border-radius: 20px;
+      }
+
+      .hero-left {
+        max-width: 100%;
+        order: 2; 
+      }
+      
+      .hero-right {
+        order: 0; 
+        margin-bottom: 20px;
+      }
+
+      .intro-line {
+        padding-left: 0; 
+        justify-content: center;
+        display: flex;
+        font-size: 20px;
+      }
+      
+      .intro-line::before {
+        display: none;
+      }
+
+      .hello-text {
+        font-size: 42px;
+      }
+
+      .main-title {
+        font-size: 32px;
+      }
+
+      .cta-buttons {
+        justify-content: center;
+        width: 100%;
+      }
+
+      /* Avatar Resizing */
+      .avatar-container {
+        width: 240px;
+        height: 240px;
+      }
+      
+      .avatar-photo {
+        width: 170px;
+        height: 170px;
+      }
+
+      /* Tech Bar */
+      .tech-bar {
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+        padding: 20px 10px;
+      }
+      
+      .tech-item {
+         flex: 0 0 calc(33.33% - 15px); 
+         justify-content: center;
+      }
+
+      /* About Section - REFINED MOBILE UX */
+      .about-view-split {
+        flex-direction: column;
+        gap: 32px;
+        padding: 24px 16px;
+      }
+
+      .about-left {
+        width: 100%;
+        max-width: 100%;
+        position: static;
+        overflow-x: auto;
+        padding-bottom: 12px;
+        -webkit-overflow-scrolling: touch; 
+        /* Hide scrollbar for cleaner look if desired, or keep it for affordance */
+        scrollbar-width: none; /* Firefox */
+      }
+      
+      .about-left::-webkit-scrollbar {
+        display: none; /* Chrome/Safari */
+      }
+
+      .services-list {
+        flex-direction: row;
+        gap: 12px;
+        min-width: max-content;
+        padding: 0 4px;
+        /* Scroll Snap Logic */
+        scroll-snap-type: x mandatory;
+      }
+
+      .services-list::before {
+        display: none; 
+      }
+      
+      .service-row {
+        display: flex; /* Ensure flex */
+        flex-direction: column;
+        align-items: center; /* Center horizontally in column */
+        justify-content: center; /* Center vertically */
+        gap: 8px;
+        text-align: center;
+        padding: 12px 16px;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 12px;
+        min-width: 120px;
+        /* Snap alignment */
+        scroll-snap-align: center;
+        transition: all 0.2s ease;
+      }
+      
+      .service-row.active {
+        background: rgba(255, 107, 53, 0.15);
+        border: 1px solid rgba(255, 107, 53, 0.5);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 107, 53, 0.1);
+      }
+      
+      .service-indicator {
+        display: none; /* Remove dot as requested */
+      }
+      
+      .service-row.active .service-indicator {
+        /* No override needed if hidden */
+      }
+      
+      /* Force wrapping and centering for list items (Education & Experience) */
+      .service-name {
+        white-space: normal; /* Allow wrapping */
+        text-align: center;
+        display: block;
+        width: 100%;
+        line-height: 1.3;
+        font-size: 13px; /* Slightly smaller to fit 2 lines perfectly */
+      }
+
+      .about-right {
+        width: 100%;
+        padding: 0 4px;
+      }
+
+      .about-title {
+        font-size: 20px; /* Slightly smaller to help fit */
+        text-align: center;
+        line-height: 1.3;
+        margin-bottom: 8px;
+        color: #fff;
+        
+        /* Force wrapping */
+        white-space: normal;
+        overflow-wrap: break-word; /* Standard property */
+        word-wrap: break-word;    /* Legacy property */
+        word-break: break-word;   /* Ensure long words break */
+        hyphens: auto;            /* Add hyphens if needed */
+        max-width: 100%;          /* Ensure it respects container width */
+      }
+      
+      .exp-subtitle-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        text-align: center;
+        margin-top: 4px;
+        font-size: 14px;
+        color: #aaa;
+        margin-bottom: 20px;
+      }
+      
+      .about-bio {
+        text-align: left;
+        font-size: 15px;
+        line-height: 1.6;
+        color: #ccc;
+        /* Remove card styling for clean text */
+        background: transparent;
+        padding: 0;
+        border: none;
+      }
+      
+      .stats-row {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 24px;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255,255,255,0.05);
+      }
+      
+      .stat-item {
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Projects Section */
+      .projects-grid-modern {
+        gap: 40px;
+      }
+
+      .project-card-modern {
+        padding-bottom: 30px;
+      }
+
+      .project-header-modern {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+      
+      .project-actions-modern {
+        width: 100%;
+        justify-content: flex-start;
+        padding-top: 10px; /* Slight separation */
+      }
+      
+      .project-top-section {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .project-details-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        padding-top: 25px;
+      }
+      
+      .projects-title-lg {
+        font-size: 32px;
+      }
+
+      /* Skills - REFINED V2 */
+      .skills-grid {
+        grid-template-columns: 1fr; 
+        gap: 40px;
+      }
+      
+      .skill-category {
+        text-align: center; /* Center everything in category for mobile */
+      }
+      
+      .skill-category-title {
+        font-size: 18px;
+        margin-bottom: 20px;
+        justify-content: center; /* Center title flex */
+      }
+      
+      .skill-chips {
+        justify-content: center; /* Center chips */
+        gap: 12px;
+      }
+      
+      .tech-chip {
+        padding: 10px 16px; /* Larger touch target */
+        font-size: 14px;
+      }
+
+      /* Contact Section - FIX ALIGNMENT */
+      .contact-content-wrapper {
+        flex-direction: column;
+        gap: 30px;
+        align-items: stretch; /* Stretch to fill width */
+        text-align: center;
+        padding-top: 20px;
+      }
+      
+      .contact-left {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .contact-label-top {
+        justify-content: center;
+      }
+      
+      .contact-heading-lg {
+        font-size: 32px; /* Smaller for mobile */
+      }
+      
+      .contact-right {
+        width: 100%;
+        padding-top: 0;
+      }
+      
+      .contact-info-list {
+        gap: 20px;
+      }
+
+      /* UTILITIES FOR MOBILE ONLY */
+      .desktop-only {
+        display: none !important;
+      }
+      
+      /* Hide redundant title on mobile (since list item acts as header) */
+      .about-title {
+        display: none;
+      }
+
+      .exp-subtitle-row {
+        margin-top: 0;
+        margin-bottom: 12px;
+      }
+      
+      /* Senecyt Badge Fix */
+      .senecyt-badge {
+        display: flex; /* Ensure flex is applied */
+        flex-direction: column;
+        align-items: flex-start; 
+        text-align: left;
+        gap: 4px;
+        padding: 8px 12px;
+        height: auto;
+        width: 100%;
+        margin-top: 10px;
+      }
+      
+      .senecyt-label {
+        font-size: 11px;
+        opacity: 0.8;
+      }
+      
+      .senecyt-value {
+        font-size: 13px;
+        word-break: break-all;
+      }
+      
+      /* UNIFIED CARD STYLES (Mobile & General) */
+      .about-view-split, 
+      .hero-landing, 
+      .skills-grid, 
+      .contact-content-wrapper {
+        background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 50%, #141414 100%) !important;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        /* border-left removed as requested */
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      }
+      
+      .contact-icon-circle {
+        margin: 0 auto;
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+      }
+      
+      .contact-details-text {
+        align-items: center;
+      }
+      
+      .contact-value {
+        font-size: 16px; /* Prevent overflow */
+        word-break: break-all; /* Ensure emails don't overflow */
+      }
+      
+      .preference-message {
+        margin-top: 30px;
+        font-size: 14px;
+        justify-content: center;
+      }
+    }
+
+    /* Mobile (max-width: 480px) */
+    @media (max-width: 480px) {
+      .hero-landing {
+        padding: 20px 15px;
+      }
+
+      .hello-text {
+        font-size: 36px;
+      }
+      
+      .main-title {
+        font-size: 26px;
+      }
+
+      .btn-accent, .btn-outline-light, .btn-linkedin, .btn-primary {
         width: 100%;
         justify-content: center;
       }
@@ -3044,313 +3565,30 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
         width: 200px;
         height: 200px;
       }
-
-      .avatar-rings {
-        width: 100%;
-        height: 100%;
-      }
-
+      
       .avatar-photo {
-        width: 130px;
-        height: 130px;
+        width: 140px;
+        height: 140px;
+      }
+      
+      .tech-item {
+        flex: 0 0 calc(50% - 10px); /* 2 cols */
       }
 
-      /* Sobre Mí Responsive */
-      .about-view-split {
-        flex-direction: column;
-        gap: 40px;
-        padding: 20px;
+      .project-title-modern {
+        font-size: 22px;
       }
-
-      .about-right {
-        order: 1;
-        text-align: center;
-      }
-
-      .about-left {
-        order: 2;
-        width: 100%;
-        max-width: 100%;
-      }
-
-      .about-title {
-        font-size: 32px;
-      }
-
-      .about-bio {
-        font-size: 14px;
-        margin-bottom: 30px;
-      }
-
-      .stats-row {
-        justify-content: center;
-        gap: 20px;
+      
+      .project-desc-modern p {
+        font-size: 15px;
       }
 
       .stat-number {
-        font-size: 28px;
-        justify-content: center;
-      }
-
-      .services-list {
-        align-items: center; /* Center items on mobile */
-      }
-      
-      .services-list::before {
-        left: 50%;
-        transform: translateX(-50%);
-        display: none; /* Hide line on mobile usually looks better or center it */
-      }
-
-      .service-row {
-        width: 100%;
-        justify-content: center; /* Center content */
-        max-width: 300px;
-        margin: 0 auto;
-      }
-
-      .availability-badge {
-        font-size: 11px;
-        padding: 8px 14px;
-      }
-
-      /* Proyectos Responsive */
-      .projects-grid-alternating {
-        gap: 80px;
-      }
-      
-      .project-row,
-      .project-row.reverse {
-        flex-direction: column-reverse; /* Image on top usually looks better, but let's try Content bottom */
-        gap: 30px;
-      }
-
-      .project-image-side, 
-      .project-content-side {
-        width: 100%;
-      }
-
-      .projects-title-lg {
-        font-size: 36px;
-      }
-
-      .project-title-lg {
         font-size: 24px;
       }
       
-      .project-img-container {
-        height: 200px;
-      }
-
-      /* Contact Responsive */
-      .contact-content-wrapper {
-        flex-direction: column;
-        gap: 40px;
-      }
-      
-      .contact-left, .contact-right {
-        width: 100%;
-        text-align: center;
-      }
-
-      .contact-label-top, 
-      .contact-heading-lg {
-        justify-content: center;
-        text-align: center;
-      }
-      
-      .contact-heading-lg {
-        font-size: 36px;
-      }
-
-      .btn-submit-mobile {
-        display: none; /* Only if we wanted separate button */
-      }
-      
-      .btn-submit-orange {
-        align-self: center; /* Center button on mobile */
-        width: 100%;
-      }
-
-      .contact-form-minimal {
+      .footer-socials {
         gap: 20px;
-      }
-
-      .tech-item {
-        flex: 0 0 calc(50% - 15px);
-      }
-
-      .tech-item i {
-        font-size: 20px;
-      }
-
-      .tech-item span {
-        font-size: 10px;
-      }
-    }
-
-    /* ==========================================
-       RESPONSIVE - NUEVO DISEÑO PORTAFOLIO
-       ========================================== */
-    @media (max-width: 768px) {
-      .split-view {
-        flex-direction: column;
-      }
-
-      .code-column {
-        display: none;
-      }
-
-      .preview-column {
-        flex: 1;
-        width: 100%;
-      }
-
-      .preview-content {
-        padding: 16px;
-      }
-
-      .portfolio-view {
-        gap: 16px;
-      }
-
-      .hero-section {
-        padding: 28px 20px;
-      }
-
-      .avatar-ring {
-        width: 110px;
-        height: 110px;
-      }
-
-      .hero-name {
-        font-size: 26px;
-      }
-
-      .hero-role {
-        font-size: 16px;
-      }
-
-      .hero-bio {
-        font-size: 14px;
-      }
-
-      .hero-actions {
-        flex-direction: column;
-        width: 100%;
-      }
-
-      .btn-primary,
-      .btn-secondary {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .section-card {
-        padding: 20px;
-      }
-
-      .section-header-main {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-
-      .page-title {
-        font-size: 22px;
-      }
-
-      .tech-chip {
-        padding: 8px 12px;
-        font-size: 12px;
-      }
-
-      .project-card-new {
-        padding: 20px;
-      }
-
-      .project-name {
-        font-size: 18px;
-      }
-
-      .gallery-image {
-        height: 200px;
-      }
-
-      .gallery-nav {
-        width: 32px;
-        height: 32px;
-      }
-
-      .timeline {
-        padding-left: 20px;
-      }
-
-      .timeline-marker {
-        left: -20px;
-        width: 12px;
-        height: 12px;
-      }
-
-      .timeline-content {
-        padding: 14px;
-      }
-
-      .skills-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .contact-hero {
-        padding: 30px 20px;
-      }
-
-      .contact-title {
-        font-size: 24px;
-      }
-
-      .contact-cards {
-        flex-direction: column;
-      }
-
-      .contact-card {
-        width: 100%;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .hero-name {
-        font-size: 22px;
-      }
-
-      .avatar-ring {
-        width: 90px;
-        height: 90px;
-      }
-
-      .status-badge {
-        font-size: 10px;
-        padding: 3px 10px;
-      }
-
-      .tech-chip {
-        padding: 6px 10px;
-        font-size: 11px;
-      }
-
-      .tech-chip i {
-        font-size: 14px;
-      }
-
-      .project-name {
-        font-size: 16px;
-      }
-
-      .gallery-image {
-        height: 160px;
-      }
-
-      .timeline-title {
-        font-size: 14px;
       }
     }
   `]
@@ -3364,24 +3602,49 @@ export class CodeEditorComponent {
 
   activeFile = this.editorState.activeFile;
 
-  codeVisible = signal(true);
+  // Signal for manual toggle state (null means "auto/default")
+  private manualCodeVisible = signal<boolean | null>(null);
+
+  // Computed signal that determines actual visibility
+  codeVisible = computed(() => {
+    // 1. If user manually toggled, respect that
+    const manual = this.manualCodeVisible();
+    if (manual !== null) return manual;
+
+    // 2. Otherwise default logic based on file type
+    const file = this.activeFile();
+    // Files that have previews default to showing preview (codeVisible = false)
+    if (file && (file.id === 'inicio' || file.id === 'proyectos' || file.id === 'sobre-mi' || file.id === 'habilidades' || file.id === 'contacto')) {
+      return false;
+    }
+    // Files like README default to showing code
+    return true;
+  });
+
+  // Helper to know if we CAN show a preview
+  showPreview = computed(() => {
+    const file = this.activeFile();
+    return file && (file.id === 'inicio' || file.id === 'proyectos' || file.id === 'sobre-mi' || file.id === 'habilidades' || file.id === 'contacto');
+  });
+
+  constructor() {
+    // Reset manual toggle when file changes so defaults apply
+    effect(() => {
+      const file = this.activeFile();
+      this.manualCodeVisible.set(null);
+    }, { allowSignalWrites: true });
+  }
+
+  toggleCode() {
+    // Toggle the MANUAL state based on current COMPUTED state
+    // If currently visible, we want to hide it (false). If hidden, show (true).
+    this.manualCodeVisible.set(!this.codeVisible());
+  }
 
   // State for About Me section
   activeSection = signal<'experience' | 'education'>('experience');
   activeExperience = signal(0);
   activeEducation = signal(0);
-
-
-  constructor() {
-    effect(() => {
-      const file = this.activeFile();
-      if (file && (file.id === 'inicio' || file.id === 'proyectos' || file.id === 'sobre-mi' || file.id === 'habilidades' || file.id === 'contacto')) {
-        this.codeVisible.set(false);
-      } else {
-        this.codeVisible.set(true);
-      }
-    }, { allowSignalWrites: true });
-  }
 
   setActiveSection(section: 'experience' | 'education', index: number) {
     this.activeSection.set(section);
@@ -3448,14 +3711,6 @@ export class CodeEditorComponent {
     return 'pi pi-code'; // Fallback icon
   }
 
-  showPreview = computed(() => {
-    const file = this.activeFile();
-    return file && (file.id === 'inicio' || file.id === 'proyectos' || file.id === 'sobre-mi' || file.id === 'habilidades' || file.id === 'contacto');
-  });
-
-  toggleCode() {
-    this.codeVisible.update(v => !v);
-  }
 
   highlightedContent = computed(() => {
     const file = this.activeFile();
