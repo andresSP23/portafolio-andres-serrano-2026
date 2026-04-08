@@ -1,4 +1,4 @@
-﻿import { Component, inject, computed, ElementRef, ViewChild, EffectRef, effect, signal } from '@angular/core';
+import { Component, inject, computed, ElementRef, ViewChild, EffectRef, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EditorState } from '../../state/editor.state';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -99,6 +99,10 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                       <div class="tech-item"><i class="devicon-typescript-plain colored"></i><span>TypeScript</span></div>
                       <div class="tech-item"><i class="devicon-spring-original colored"></i><span>Spring</span></div>
                       <div class="tech-item"><i class="devicon-postgresql-plain colored"></i><span>PostgreSQL</span></div>
+                      <div class="tech-item"><i class="devicon-dotnetcore-plain colored"></i><span>.NET</span></div>
+                      <div class="tech-item"><i class="devicon-microsoftsqlserver-plain colored"></i><span>SQL Server</span></div>
+                      <div class="tech-item"><i class="pi pi-sitemap"></i><span>Arquitectura</span></div>
+                      <div class="tech-item"><i class="devicon-blazor-original colored"></i><span>Blazor</span></div>
                     }
                   </div>
                 </div>
@@ -3696,6 +3700,11 @@ export class CodeEditorComponent {
       'python': 'devicon-python-plain colored',
       'php': 'devicon-php-plain colored',
       'c#': 'devicon-csharp-plain colored',
+      '.net': 'devicon-dotnetcore-plain colored',
+      'net': 'devicon-dotnetcore-plain colored',
+      'sql server': 'devicon-microsoftsqlserver-plain colored',
+      'arquitectura': 'pi pi-sitemap',
+      'blazor': 'devicon-blazor-original colored',
       'postgresql': 'devicon-postgresql-plain colored',
       'mysql': 'devicon-mysql-plain colored',
       'mongodb': 'devicon-mongodb-plain colored',

@@ -40,7 +40,11 @@ Usa la **Barra de Actividad** de la izquierda para navegar.
     'Java', 
     'TypeScript',
     'Spring Boot',
-    'PostgreSQL'
+    'PostgreSQL',
+    '.NET',
+    'SQL Server',
+    'Arquitectura',
+    'Blazor'
   ],
   bio: 'Soy un Desarrollador de Software apasionado por la tecnología y la creación de soluciones eficientes. Me encanta enfrentar nuevos desafíos, aprender constantemente y aportar ideas innovadoras.'
 };
