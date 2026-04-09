@@ -52,7 +52,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                           <i class="pi pi-github"></i>
                           Ver proyectos
                         </a>
-                        <a href="assets/CV_Andres-Serrano.pdf" download="Andres_Serrano_CV.pdf" class="btn-outline-light">
+                        <a href="assets/Andres_Serrano_CV_2026.pdf" download="Andres_Serrano_CV_2026.pdf" class="btn-outline-light">
                           <i class="pi pi-file-pdf"></i>
                           Mi CV
                         </a>
